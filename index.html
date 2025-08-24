@@ -1,0 +1,1759 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard Monitoring Kerja - Sekolah Boarding Internasional</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+        body { font-family: 'Inter', sans-serif; }
+        .progress-bar {
+            transition: width 0.3s ease-in-out;
+        }
+        .team-card {
+            transition: all 0.3s ease;
+        }
+        .team-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+        }
+        .status-online { 
+            animation: pulse 2s infinite;
+        }
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+        .notification {
+            animation: slideIn 0.3s ease-out;
+        }
+        @keyframes slideIn {
+            from { transform: translateX(100%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+        .chart-card {
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .chart-card:hover {
+            transform: translateY(-8px) scale(1.02);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+        }
+        .floating-animation {
+            animation: float 3s ease-in-out infinite;
+        }
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+        }
+        .bounce-in {
+            animation: bounceIn 0.6s ease-out;
+        }
+        @keyframes bounceIn {
+            0% { transform: scale(0.3); opacity: 0; }
+            50% { transform: scale(1.05); }
+            70% { transform: scale(0.9); }
+            100% { transform: scale(1); opacity: 1; }
+        }
+    </style>
+</head>
+<body class="bg-gradient-to-br from-blue-50 to-indigo-100 min-h-screen">
+    <!-- Header -->
+    <header class="bg-white shadow-lg border-b-4 border-blue-600">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 py-4">
+            <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+                <div class="flex-1">
+                    <h1 class="text-xl sm:text-2xl lg:text-3xl font-bold text-gray-800">Dashboard Monitoring Kerja</h1>
+                    <p class="text-sm sm:text-base text-gray-600 mt-1">Sekolah Boarding Internasional Al-Hikmah</p>
+                </div>
+                <div class="flex items-center space-x-3 sm:space-x-4">
+                    <div class="text-right hidden sm:block">
+                        <p class="text-sm text-gray-500">Direktur</p>
+                        <p class="font-semibold text-gray-800">Dr. Ahmad Wijaya</p>
+                    </div>
+                    <div class="w-10 h-10 sm:w-12 sm:h-12 bg-blue-600 rounded-full flex items-center justify-center text-white font-bold text-sm sm:text-lg">
+                        AW
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Google Sheets Setup Banner -->
+    <div id="setupBanner" class="bg-yellow-50 border-l-4 border-yellow-400 p-4 mx-4 sm:mx-6 mt-4 rounded-r-lg">
+        <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
+            <div class="flex items-start flex-1">
+                <div class="flex-shrink-0 mt-0.5">
+                    <svg class="h-5 w-5 text-yellow-400" viewBox="0 0 20 20" fill="currentColor">
+                        <path fill-rule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clip-rule="evenodd" />
+                    </svg>
+                </div>
+                <div class="ml-3 flex-1">
+                    <p class="text-sm text-yellow-700">
+                        <strong>Setup Google Sheets:</strong> <span class="hidden sm:inline">Klik "Setup Google Sheets" untuk mengaktifkan integrasi database otomatis</span><span class="sm:hidden">Aktifkan integrasi database</span>
+                    </p>
+                </div>
+            </div>
+            <div class="flex space-x-2 w-full sm:w-auto">
+                <button onclick="openSetupModal()" class="bg-yellow-600 hover:bg-yellow-700 text-white px-3 sm:px-4 py-2 rounded-lg text-xs sm:text-sm font-medium transition-colors flex-1 sm:flex-none">
+                    <span class="sm:hidden">Setup</span><span class="hidden sm:inline">Setup Google Sheets</span>
+                </button>
+                <button onclick="dismissBanner()" class="text-yellow-700 hover:text-yellow-900 p-2">
+                    <svg class="h-4 w-4 sm:h-5 sm:w-5" viewBox="0 0 20 20" fill="currentColor">
+                        <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd" />
+                    </svg>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Dashboard -->
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 py-6 sm:py-8">
+        <!-- Interactive Statistics Cards -->
+        <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6 mb-8">
+            <!-- Program Approved - List Chart -->
+            <div class="chart-card bg-gradient-to-br from-green-50 to-emerald-100 rounded-xl shadow-lg p-6 cursor-pointer" onclick="animateChart('approvedChart')">
+                <div class="flex items-center justify-between mb-4">
+                    <div>
+                        <p class="text-sm font-medium text-gray-600">Program Approved</p>
+                        <p class="text-3xl font-bold text-green-600" id="approvedPrograms">12</p>
+                        <p class="text-xs text-gray-500">program disetujui</p>
+                    </div>
+                    <div class="relative">
+                        <div class="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center">
+                            <span class="text-green-600 text-xl floating-animation">✅</span>
+                        </div>
+                        <div class="absolute -top-1 -right-1 w-6 h-6 bg-blue-500 rounded-full flex items-center justify-center bounce-in">
+                            <span class="text-white text-xs font-bold" id="newApprovedCount">3</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="space-y-1" id="approvedChart">
+                    <div class="flex items-center justify-between text-xs">
+                        <span class="text-green-600">Akademik</span>
+                        <span class="font-medium" id="academicApproved">5</span>
+                    </div>
+                    <div class="w-full bg-gray-200 rounded-full h-1.5">
+                        <div class="bg-green-500 h-1.5 rounded-full transition-all duration-1000 ease-out" style="width: 0%" id="academicBar"></div>
+                    </div>
+                    <div class="flex items-center justify-between text-xs">
+                        <span class="text-blue-600">Kepesantrenan</span>
+                        <span class="font-medium" id="pesantrenApproved">4</span>
+                    </div>
+                    <div class="w-full bg-gray-200 rounded-full h-1.5">
+                        <div class="bg-blue-500 h-1.5 rounded-full transition-all duration-1000 ease-out" style="width: 0%" id="pesantrenBar"></div>
+                    </div>
+                    <div class="flex items-center justify-between text-xs">
+                        <span class="text-purple-600">Infrastruktur</span>
+                        <span class="font-medium" id="infraApproved">3</span>
+                    </div>
+                    <div class="w-full bg-gray-200 rounded-full h-1.5">
+                        <div class="bg-purple-500 h-1.5 rounded-full transition-all duration-1000 ease-out" style="width: 0%" id="infraBar"></div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Usulan Program Baru - File Downloads -->
+            <div class="chart-card bg-gradient-to-br from-blue-50 to-indigo-100 rounded-xl shadow-lg p-6 cursor-pointer" onclick="animateChart('proposalChart')">
+                <div class="flex items-center justify-between mb-4">
+                    <div>
+                        <p class="text-sm font-medium text-gray-600">Usulan Program</p>
+                        <p class="text-3xl font-bold text-blue-600" id="pendingProposals">8</p>
+                        <p class="text-xs text-gray-500">menunggu review</p>
+                    </div>
+                    <div class="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center">
+                        <span class="text-blue-600 text-xl floating-animation">📋</span>
+                    </div>
+                </div>
+                <div class="space-y-2" id="proposalChart">
+                    <div class="flex items-center justify-between">
+                        <button onclick="downloadFile('proposal_kurikulum_2024.pdf')" class="flex items-center space-x-2 text-xs text-blue-600 hover:text-blue-800 hover:bg-blue-50 px-2 py-1 rounded transition-colors">
+                            <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                            </svg>
+                            <span>Kurikulum 2024</span>
+                        </button>
+                        <span class="text-xs text-gray-500">Baru</span>
+                    </div>
+                    <div class="flex items-center justify-between">
+                        <button onclick="downloadFile('proposal_lab_komputer.pdf')" class="flex items-center space-x-2 text-xs text-blue-600 hover:text-blue-800 hover:bg-blue-50 px-2 py-1 rounded transition-colors">
+                            <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                            </svg>
+                            <span>Lab Komputer</span>
+                        </button>
+                        <span class="text-xs text-gray-500">Review</span>
+                    </div>
+                    <div class="flex items-center justify-between">
+                        <button onclick="downloadFile('proposal_asrama_baru.pdf')" class="flex items-center space-x-2 text-xs text-blue-600 hover:text-blue-800 hover:bg-blue-50 px-2 py-1 rounded transition-colors">
+                            <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                            </svg>
+                            <span>Asrama Baru</span>
+                        </button>
+                        <span class="text-xs text-gray-500">Pending</span>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Pembayaran SPP - Payment Stats -->
+            <div class="chart-card bg-gradient-to-br from-yellow-50 to-amber-100 rounded-xl shadow-lg p-6 cursor-pointer" onclick="animateChart('paymentChart')">
+                <div class="flex items-center justify-between mb-4">
+                    <div>
+                        <p class="text-sm font-medium text-gray-600">Pembayaran SPP</p>
+                        <p class="text-3xl font-bold text-yellow-600" id="paidStudents">847</p>
+                        <p class="text-xs text-gray-500">dari 920 santri</p>
+                    </div>
+                    <div class="relative">
+                        <svg class="w-16 h-16 transform -rotate-90" id="paymentChart">
+                            <circle cx="32" cy="32" r="28" stroke="#e5e7eb" stroke-width="4" fill="none"/>
+                            <circle cx="32" cy="32" r="28" stroke="#d97706" stroke-width="4" fill="none" 
+                                    stroke-dasharray="176" stroke-dashoffset="176" 
+                                    class="transition-all duration-1000 ease-out" id="paymentCircle"/>
+                        </svg>
+                        <div class="absolute inset-0 flex items-center justify-center">
+                            <span class="text-yellow-600 text-xl floating-animation">💰</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="space-y-1">
+                    <div class="flex justify-between text-xs">
+                        <span class="text-green-600">Lunas</span>
+                        <span class="font-medium text-green-600" id="paidPercentage">92%</span>
+                    </div>
+                    <div class="flex justify-between text-xs">
+                        <span class="text-red-600">Belum Bayar</span>
+                        <span class="font-medium text-red-600" id="unpaidCount">73</span>
+                    </div>
+                    <div class="flex justify-between text-xs">
+                        <span class="text-gray-600">Total Tagihan</span>
+                        <span class="font-medium text-gray-800" id="totalBilling">Rp 2.3M</span>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Upcoming Events - Event Calendar -->
+            <div class="chart-card bg-gradient-to-br from-purple-50 to-violet-100 rounded-xl shadow-lg p-6 cursor-pointer" onclick="animateChart('eventsChart')">
+                <div class="flex items-center justify-between mb-4">
+                    <div>
+                        <p class="text-sm font-medium text-gray-600">Upcoming Events</p>
+                        <p class="text-3xl font-bold text-purple-600" id="upcomingEvents">5</p>
+                        <p class="text-xs text-gray-500">minggu ini</p>
+                    </div>
+                    <div class="w-16 h-16 bg-purple-100 rounded-full flex items-center justify-center">
+                        <span class="text-purple-600 text-xl floating-animation">📅</span>
+                    </div>
+                </div>
+                <div class="space-y-2" id="eventsChart">
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-center space-x-2">
+                            <div class="w-2 h-2 bg-red-500 rounded-full animate-pulse"></div>
+                            <span class="text-xs text-gray-700">Ujian Tengah Semester</span>
+                        </div>
+                        <span class="text-xs text-gray-500">Besok</span>
+                    </div>
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-center space-x-2">
+                            <div class="w-2 h-2 bg-blue-500 rounded-full"></div>
+                            <span class="text-xs text-gray-700">Rapat Wali Murid</span>
+                        </div>
+                        <span class="text-xs text-gray-500">Kamis</span>
+                    </div>
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-center space-x-2">
+                            <div class="w-2 h-2 bg-green-500 rounded-full"></div>
+                            <span class="text-xs text-gray-700">Wisuda Tahfidz</span>
+                        </div>
+                        <span class="text-xs text-gray-500">Sabtu</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Additional Analytics Row -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+            <!-- Status Distribution -->
+            <div class="chart-card bg-white rounded-xl shadow-lg p-6">
+                <h3 class="text-lg font-semibold text-gray-800 mb-4">Status Tim</h3>
+                <div class="space-y-3" id="statusDistribution">
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-center space-x-2">
+                            <div class="w-3 h-3 bg-green-500 rounded-full animate-pulse"></div>
+                            <span class="text-sm text-gray-600">Sedang Bekerja</span>
+                        </div>
+                        <span class="font-medium text-green-600" id="workingCount">5</span>
+                    </div>
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-center space-x-2">
+                            <div class="w-3 h-3 bg-blue-500 rounded-full"></div>
+                            <span class="text-sm text-gray-600">Rapat</span>
+                        </div>
+                        <span class="font-medium text-blue-600" id="meetingCount">1</span>
+                    </div>
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-center space-x-2">
+                            <div class="w-3 h-3 bg-yellow-500 rounded-full"></div>
+                            <span class="text-sm text-gray-600">Istirahat</span>
+                        </div>
+                        <span class="font-medium text-yellow-600" id="breakCount">1</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Weekly Progress Trend -->
+            <div class="chart-card bg-white rounded-xl shadow-lg p-6">
+                <h3 class="text-lg font-semibold text-gray-800 mb-4">Trend Mingguan</h3>
+                <div class="flex items-end justify-between h-24 space-x-1" id="weeklyTrend">
+                    <div class="bg-blue-200 rounded-t transition-all duration-1000 ease-out hover:bg-blue-400 cursor-pointer" style="height: 20%; width: 12%" title="Senin: 45%"></div>
+                    <div class="bg-blue-300 rounded-t transition-all duration-1000 ease-out hover:bg-blue-400 cursor-pointer" style="height: 40%; width: 12%" title="Selasa: 60%"></div>
+                    <div class="bg-blue-400 rounded-t transition-all duration-1000 ease-out hover:bg-blue-500 cursor-pointer" style="height: 60%; width: 12%" title="Rabu: 75%"></div>
+                    <div class="bg-blue-500 rounded-t transition-all duration-1000 ease-out hover:bg-blue-600 cursor-pointer" style="height: 80%; width: 12%" title="Kamis: 85%"></div>
+                    <div class="bg-blue-600 rounded-t transition-all duration-1000 ease-out hover:bg-blue-700 cursor-pointer" style="height: 100%; width: 12%" title="Jumat: 92%"></div>
+                    <div class="bg-blue-500 rounded-t transition-all duration-1000 ease-out hover:bg-blue-600 cursor-pointer" style="height: 75%; width: 12%" title="Sabtu: 78%"></div>
+                    <div class="bg-blue-400 rounded-t transition-all duration-1000 ease-out hover:bg-blue-500 cursor-pointer" style="height: 90%; width: 12%" title="Minggu: 88%"></div>
+                </div>
+                <div class="flex justify-between text-xs text-gray-500 mt-2">
+                    <span>Sen</span>
+                    <span>Sel</span>
+                    <span>Rab</span>
+                    <span>Kam</span>
+                    <span>Jum</span>
+                    <span>Sab</span>
+                    <span>Min</span>
+                </div>
+            </div>
+
+            <!-- Performance Score -->
+            <div class="chart-card bg-white rounded-xl shadow-lg p-6">
+                <h3 class="text-lg font-semibold text-gray-800 mb-4">Skor Performa</h3>
+                <div class="text-center">
+                    <div class="relative inline-block">
+                        <svg class="w-24 h-24 transform -rotate-90">
+                            <circle cx="48" cy="48" r="40" stroke="#e5e7eb" stroke-width="8" fill="none"/>
+                            <circle cx="48" cy="48" r="40" stroke="url(#performanceGradient)" stroke-width="8" fill="none" 
+                                    stroke-dasharray="251" stroke-dashoffset="251" 
+                                    class="transition-all duration-2000 ease-out" id="performanceCircle"/>
+                            <defs>
+                                <linearGradient id="performanceGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+                                    <stop offset="0%" style="stop-color:#10b981;stop-opacity:1" />
+                                    <stop offset="50%" style="stop-color:#3b82f6;stop-opacity:1" />
+                                    <stop offset="100%" style="stop-color:#8b5cf6;stop-opacity:1" />
+                                </linearGradient>
+                            </defs>
+                        </svg>
+                        <div class="absolute inset-0 flex items-center justify-center">
+                            <div class="text-center">
+                                <div class="text-2xl font-bold text-gray-800" id="performanceScore">87</div>
+                                <div class="text-xs text-gray-500">Excellent</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="mt-4 space-y-2">
+                    <div class="flex justify-between text-sm">
+                        <span class="text-gray-600">Efisiensi</span>
+                        <span class="font-medium text-green-600">92%</span>
+                    </div>
+                    <div class="flex justify-between text-sm">
+                        <span class="text-gray-600">Ketepatan Waktu</span>
+                        <span class="font-medium text-blue-600">85%</span>
+                    </div>
+                    <div class="flex justify-between text-sm">
+                        <span class="text-gray-600">Kualitas</span>
+                        <span class="font-medium text-purple-600">89%</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Filter dan Search -->
+        <div class="bg-white rounded-xl shadow-md p-4 sm:p-6 mb-6 sm:mb-8">
+            <div class="flex flex-col gap-4">
+                <!-- Filter Row -->
+                <div class="flex flex-col sm:flex-row gap-3 sm:gap-4">
+                    <select id="statusFilter" class="flex-1 px-3 sm:px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm">
+                        <option value="all">Semua Status</option>
+                        <option value="online">Sedang Bekerja</option>
+                        <option value="break">Istirahat</option>
+                        <option value="meeting">Rapat</option>
+                    </select>
+                    <select id="teamFilter" class="flex-1 px-3 sm:px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm">
+                        <option value="all">Semua Tim</option>
+                        <option value="smp">Kepala SMP</option>
+                        <option value="sma">Kepala SMA</option>
+                        <option value="pesantren">Kepala Kepesantrenan</option>
+                        <option value="tu">Tata Usaha</option>
+                        <option value="bendahara">Bendahara</option>
+                        <option value="medsos">Admin Medsos</option>
+                        <option value="asrama">Wali Asrama</option>
+                    </select>
+                </div>
+                
+                <!-- Action Row -->
+                <div class="flex flex-col sm:flex-row items-start sm:items-center gap-3 sm:gap-4">
+                    <!-- Sheets Status -->
+                    <div class="flex items-center gap-2 order-3 sm:order-1">
+                        <div id="sheetsStatus" class="w-3 h-3 bg-red-500 rounded-full"></div>
+                        <span class="text-xs sm:text-sm text-gray-600" id="sheetsStatusText">Google Sheets: Belum Setup</span>
+                    </div>
+                    
+                    <!-- Buttons -->
+                    <div class="flex gap-2 sm:gap-3 w-full sm:w-auto order-1 sm:order-2">
+                        <button onclick="openInputModal()" class="flex-1 sm:flex-none px-3 sm:px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors flex items-center justify-center gap-2 text-sm">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
+                            </svg>
+                            <span class="hidden sm:inline">Input Laporan</span>
+                            <span class="sm:hidden">Input</span>
+                        </button>
+                        
+                        <div class="flex items-center gap-2 order-2 sm:order-3">
+                            <span class="text-xs sm:text-sm text-gray-600 hidden sm:inline">Auto Refresh:</span>
+                            <button id="autoRefresh" class="px-3 sm:px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors text-sm">
+                                ON
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Team Cards Grid -->
+        <div class="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-6" id="teamGrid">
+            <!-- Team cards will be generated by JavaScript -->
+        </div>
+
+        <!-- Google Sheets Setup Modal -->
+        <div id="setupModal" class="fixed inset-0 bg-black bg-opacity-50 hidden z-50 flex items-center justify-center p-2 sm:p-4">
+            <div class="bg-white rounded-xl shadow-2xl max-w-4xl w-full max-h-[95vh] sm:max-h-[90vh] overflow-y-auto">
+                <div class="p-4 sm:p-6 border-b border-gray-200">
+                    <div class="flex justify-between items-center">
+                        <h3 class="text-lg sm:text-2xl font-bold text-gray-800">Setup Google Sheets Integration</h3>
+                        <button onclick="closeSetupModal()" class="text-gray-500 hover:text-gray-700 text-xl sm:text-2xl p-1">&times;</button>
+                    </div>
+                </div>
+                <div class="p-4 sm:p-6">
+                    <div class="space-y-6">
+                        <!-- Step 1 -->
+                        <div class="border border-gray-200 rounded-lg p-4">
+                            <h4 class="font-semibold text-gray-800 mb-3 flex items-center">
+                                <span class="bg-blue-500 text-white rounded-full w-6 h-6 flex items-center justify-center text-sm mr-2">1</span>
+                                Buat Google Spreadsheet
+                            </h4>
+                            <div class="ml-8 space-y-2">
+                                <p class="text-gray-600">• Buka <a href="https://sheets.google.com" target="_blank" class="text-blue-600 hover:underline">Google Sheets</a></p>
+                                <p class="text-gray-600">• Buat spreadsheet baru dengan nama "Dashboard Monitoring Kerja"</p>
+                                <p class="text-gray-600">• Buat 3 sheet: "Laporan_Tugas", "Update_Project", "Project_Baru"</p>
+                                <button onclick="createSampleSheet()" class="mt-2 px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 text-sm">
+                                    📋 Copy Template Headers
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Step 2 -->
+                        <div class="border border-gray-200 rounded-lg p-4">
+                            <h4 class="font-semibold text-gray-800 mb-3 flex items-center">
+                                <span class="bg-blue-500 text-white rounded-full w-6 h-6 flex items-center justify-center text-sm mr-2">2</span>
+                                Buat Google Apps Script
+                            </h4>
+                            <div class="ml-8 space-y-2">
+                                <p class="text-gray-600">• Di spreadsheet, klik Extensions → Apps Script</p>
+                                <p class="text-gray-600">• Hapus kode default, copy-paste kode di bawah:</p>
+                                <div class="bg-gray-100 p-3 rounded-lg mt-2 text-sm font-mono overflow-x-auto">
+                                    <pre id="appsScriptCode">function doPost(e) {
+  try {
+    const data = JSON.parse(e.postData.contents);
+    const ss = SpreadsheetApp.getActiveSpreadsheet();
+    
+    let sheet;
+    if (data.sheetName === 'Laporan_Tugas') {
+      sheet = ss.getSheetByName('Laporan_Tugas') || ss.insertSheet('Laporan_Tugas');
+      if (sheet.getLastRow() === 0) {
+        sheet.getRange(1, 1, 1, 8).setValues([['Timestamp', 'Tanggal', 'Waktu', 'Tim', 'Kepala Tim', 'Status', 'Aktivitas', 'Tugas Selesai']]);
+      }
+      sheet.appendRow([data.timestamp, data.date, data.time, data.team, data.leader, data.status, data.currentActivity, data.completedTasks]);
+    }
+    
+    else if (data.sheetName === 'Update_Project') {
+      sheet = ss.getSheetByName('Update_Project') || ss.insertSheet('Update_Project');
+      if (sheet.getLastRow() === 0) {
+        sheet.getRange(1, 1, 1, 10).setValues([['Timestamp', 'Tanggal', 'Tim', 'Project', 'Progress Lama', 'Progress Baru', 'Update', 'Kendala', 'Deadline', 'Prioritas']]);
+      }
+      sheet.appendRow([data.timestamp, data.date, data.team, data.projectName, data.oldProgress + '%', data.newProgress + '%', data.progressUpdate, data.obstacles, data.deadline, data.priority]);
+    }
+    
+    else if (data.sheetName === 'Project_Baru') {
+      sheet = ss.getSheetByName('Project_Baru') || ss.insertSheet('Project_Baru');
+      if (sheet.getLastRow() === 0) {
+        sheet.getRange(1, 1, 1, 8).setValues([['Timestamp', 'Tanggal', 'Tim', 'Nama Project', 'Deskripsi', 'Deadline', 'Prioritas', 'Progress Awal']]);
+      }
+      sheet.appendRow([data.timestamp, data.date, data.team, data.projectName, data.projectDescription, data.deadline, data.priority, data.initialProgress + '%']);
+    }
+    
+    return ContentService.createTextOutput(JSON.stringify({success: true})).setMimeType(ContentService.MimeType.JSON);
+  } catch (error) {
+    return ContentService.createTextOutput(JSON.stringify({success: false, error: error.toString()})).setMimeType(ContentService.MimeType.JSON);
+  }
+}</pre>
+                                </div>
+                                <button onclick="copyAppsScript()" class="mt-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 text-sm">
+                                    📋 Copy Apps Script Code
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Step 3 -->
+                        <div class="border border-gray-200 rounded-lg p-4">
+                            <h4 class="font-semibold text-gray-800 mb-3 flex items-center">
+                                <span class="bg-blue-500 text-white rounded-full w-6 h-6 flex items-center justify-center text-sm mr-2">3</span>
+                                Deploy Apps Script
+                            </h4>
+                            <div class="ml-8 space-y-2">
+                                <p class="text-gray-600">• Klik "Deploy" → "New deployment"</p>
+                                <p class="text-gray-600">• Type: Web app</p>
+                                <p class="text-gray-600">• Execute as: Me</p>
+                                <p class="text-gray-600">• Who has access: Anyone</p>
+                                <p class="text-gray-600">• Copy Web App URL yang dihasilkan</p>
+                            </div>
+                        </div>
+
+                        <!-- Step 4 -->
+                        <div class="border border-gray-200 rounded-lg p-4">
+                            <h4 class="font-semibold text-gray-800 mb-3 flex items-center">
+                                <span class="bg-blue-500 text-white rounded-full w-6 h-6 flex items-center justify-center text-sm mr-2">4</span>
+                                Masukkan URL Web App
+                            </h4>
+                            <div class="ml-8 space-y-3">
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-1">Google Apps Script Web App URL:</label>
+                                    <input type="url" id="webAppUrl" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent" placeholder="https://script.google.com/macros/s/YOUR_SCRIPT_ID/exec">
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-1">Spreadsheet ID (opsional, untuk referensi):</label>
+                                    <input type="text" id="spreadsheetId" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent" placeholder="1BxiMVs0XRA5nFMdKvBdBZjgmUUqptlbs74OgvE2upms">
+                                    <p class="text-xs text-gray-500 mt-1">ID ada di URL spreadsheet setelah /d/ dan sebelum /edit</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Test Connection -->
+                        <div class="border border-gray-200 rounded-lg p-4">
+                            <h4 class="font-semibold text-gray-800 mb-3 flex items-center">
+                                <span class="bg-blue-500 text-white rounded-full w-6 h-6 flex items-center justify-center text-sm mr-2">5</span>
+                                Test Koneksi
+                            </h4>
+                            <div class="ml-8">
+                                <button onclick="testConnection()" class="px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700">
+                                    🧪 Test Koneksi ke Google Sheets
+                                </button>
+                                <div id="testResult" class="mt-2 text-sm"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="flex justify-end space-x-3 pt-6 border-t border-gray-200 mt-6">
+                        <button onclick="closeSetupModal()" class="px-6 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors">
+                            Batal
+                        </button>
+                        <button onclick="saveGoogleSheetsConfig()" class="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors">
+                            Simpan Konfigurasi
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Detail Modal -->
+        <div id="detailModal" class="fixed inset-0 bg-black bg-opacity-50 hidden z-50 flex items-center justify-center p-2 sm:p-4">
+            <div class="bg-white rounded-xl shadow-2xl max-w-4xl w-full max-h-[95vh] sm:max-h-[90vh] overflow-y-auto">
+                <div class="p-4 sm:p-6 border-b border-gray-200">
+                    <div class="flex justify-between items-center">
+                        <h3 class="text-lg sm:text-2xl font-bold text-gray-800" id="modalTitle">Detail Tim</h3>
+                        <button onclick="closeModal()" class="text-gray-500 hover:text-gray-700 text-xl sm:text-2xl p-1">&times;</button>
+                    </div>
+                </div>
+                <div class="p-4 sm:p-6" id="modalContent">
+                    <!-- Content will be populated by JavaScript -->
+                </div>
+            </div>
+        </div>
+
+        <!-- Input Report Modal -->
+        <div id="inputModal" class="fixed inset-0 bg-black bg-opacity-50 hidden z-50 flex items-center justify-center p-2 sm:p-4">
+            <div class="bg-white rounded-xl shadow-2xl max-w-2xl w-full max-h-[95vh] sm:max-h-[90vh] overflow-y-auto">
+                <div class="p-4 sm:p-6 border-b border-gray-200">
+                    <div class="flex justify-between items-center">
+                        <h3 class="text-lg sm:text-2xl font-bold text-gray-800" id="inputModalTitle">Input Laporan</h3>
+                        <button onclick="closeInputModal()" class="text-gray-500 hover:text-gray-700 text-xl sm:text-2xl p-1">&times;</button>
+                    </div>
+                </div>
+                <div class="p-4 sm:p-6">
+                    <form id="reportForm" class="space-y-6">
+                        <!-- Team Selection -->
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Pilih Tim Anda</label>
+                            <select id="teamSelect" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent" required>
+                                <option value="">-- Pilih Tim --</option>
+                                <option value="smp">Kepala SMP</option>
+                                <option value="sma">Kepala SMA</option>
+                                <option value="pesantren">Kepala Kepesantrenan</option>
+                                <option value="tu">Tata Usaha</option>
+                                <option value="bendahara">Bendahara</option>
+                                <option value="medsos">Admin Media Sosial</option>
+                                <option value="asrama">Wali Asrama</option>
+                            </select>
+                        </div>
+
+                        <!-- Report Type -->
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Jenis Laporan</label>
+                            <div class="flex flex-wrap gap-4">
+                                <label class="flex items-center">
+                                    <input type="radio" name="reportType" value="task" class="mr-2" required>
+                                    <span>Tugas Harian</span>
+                                </label>
+                                <label class="flex items-center">
+                                    <input type="radio" name="reportType" value="project" class="mr-2" required>
+                                    <span>Update Project</span>
+                                </label>
+                                <label class="flex items-center">
+                                    <input type="radio" name="reportType" value="new_project" class="mr-2" required>
+                                    <span>Project Baru</span>
+                                </label>
+                            </div>
+                        </div>
+
+                        <!-- Task Report Section -->
+                        <div id="taskSection" class="hidden space-y-4">
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Status Aktivitas Saat Ini</label>
+                                <select id="currentStatus" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                                    <option value="online">Sedang Bekerja</option>
+                                    <option value="meeting">Rapat</option>
+                                    <option value="break">Istirahat</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Aktivitas Saat Ini</label>
+                                <input type="text" id="currentActivity" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent" placeholder="Contoh: Evaluasi Kurikulum Semester Genap">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Tugas yang Diselesaikan Hari Ini</label>
+                                <textarea id="completedTasks" rows="3" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent" placeholder="Pisahkan dengan enter untuk setiap tugas"></textarea>
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Rencana Tugas Besok</label>
+                                <textarea id="tomorrowTasks" rows="3" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent" placeholder="Pisahkan dengan enter untuk setiap tugas"></textarea>
+                            </div>
+                        </div>
+
+                        <!-- Project Update Section -->
+                        <div id="projectSection" class="hidden space-y-4">
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Pilih Project</label>
+                                <select id="projectSelect" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                                    <option value="">-- Pilih Project --</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Progress Saat Ini (%)</label>
+                                <input type="range" id="progressSlider" min="0" max="100" value="0" class="w-full">
+                                <div class="flex justify-between text-sm text-gray-600 mt-1">
+                                    <span>0%</span>
+                                    <span id="progressValue" class="font-medium">0%</span>
+                                    <span>100%</span>
+                                </div>
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Update Progress</label>
+                                <textarea id="progressUpdate" rows="3" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent" placeholder="Jelaskan perkembangan terbaru project ini..."></textarea>
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Kendala (Opsional)</label>
+                                <textarea id="obstacles" rows="2" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent" placeholder="Jelaskan kendala yang dihadapi jika ada..."></textarea>
+                            </div>
+                        </div>
+
+                        <!-- New Project Section -->
+                        <div id="newProjectSection" class="hidden space-y-4">
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Nama Project</label>
+                                <input type="text" id="newProjectName" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent" placeholder="Contoh: Program Pelatihan Guru Digital">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Deskripsi Project</label>
+                                <textarea id="newProjectDesc" rows="3" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent" placeholder="Jelaskan tujuan dan ruang lingkup project..."></textarea>
+                            </div>
+                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-2">Deadline</label>
+                                    <input type="date" id="newProjectDeadline" class="w-full px-3 sm:px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm">
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-2">Prioritas</label>
+                                    <select id="newProjectPriority" class="w-full px-3 sm:px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm">
+                                        <option value="low">Rendah</option>
+                                        <option value="medium">Sedang</option>
+                                        <option value="high">Tinggi</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Progress Awal (%)</label>
+                                <input type="range" id="newProgressSlider" min="0" max="100" value="0" class="w-full">
+                                <div class="flex justify-between text-sm text-gray-600 mt-1">
+                                    <span>0%</span>
+                                    <span id="newProgressValue" class="font-medium">0%</span>
+                                    <span>100%</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Submit Button -->
+                        <div class="flex flex-col sm:flex-row justify-end gap-3 pt-4 border-t border-gray-200">
+                            <button type="button" onclick="closeInputModal()" class="order-2 sm:order-1 px-4 sm:px-6 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors text-sm sm:text-base">
+                                Batal
+                            </button>
+                            <button type="submit" class="order-1 sm:order-2 px-4 sm:px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors text-sm sm:text-base">
+                                Kirim Laporan
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <!-- Notification -->
+        <div id="notification" class="fixed top-4 left-4 right-4 sm:left-auto sm:right-4 sm:w-auto bg-green-500 text-white px-4 sm:px-6 py-3 rounded-lg shadow-lg hidden notification z-50">
+            <div class="flex items-center space-x-2">
+                <svg class="w-4 h-4 sm:w-5 sm:h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                </svg>
+                <span id="notificationText" class="text-sm sm:text-base">Laporan berhasil dikirim!</span>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        // Data tim dan aktivitas
+        const teamsData = {
+            smp: {
+                name: "Kepala SMP",
+                leader: "Dra. Siti Nurhaliza",
+                status: "online",
+                lastActivity: "2 menit yang lalu",
+                currentTask: "Evaluasi Kurikulum Semester Genap",
+                projects: [
+                    { id: 1, name: "Revisi Kurikulum 2024", progress: 85, deadline: "2024-02-15", priority: "high" },
+                    { id: 2, name: "Pelatihan Guru Matematika", progress: 60, deadline: "2024-02-20", priority: "medium" },
+                    { id: 3, name: "Persiapan Ujian Tengah Semester", progress: 90, deadline: "2024-02-10", priority: "high" }
+                ],
+                todayTasks: [
+                    "Review RPP Kelas 7-9",
+                    "Meeting dengan Wali Kelas",
+                    "Koordinasi dengan Tim Kurikulum"
+                ]
+            },
+            sma: {
+                name: "Kepala SMA",
+                leader: "Dr. Bambang Sutrisno, M.Pd",
+                status: "meeting",
+                lastActivity: "15 menit yang lalu",
+                currentTask: "Rapat Persiapan UTBK 2024",
+                projects: [
+                    { id: 4, name: "Program Intensif UTBK", progress: 75, deadline: "2024-03-01", priority: "high" },
+                    { id: 5, name: "Kelas Olimpiade Sains", progress: 45, deadline: "2024-02-25", priority: "medium" },
+                    { id: 6, name: "Pengembangan Lab IPA", progress: 30, deadline: "2024-03-15", priority: "low" }
+                ],
+                todayTasks: [
+                    "Evaluasi Try Out UTBK",
+                    "Koordinasi dengan Bimbel Partner",
+                    "Review Jadwal Kelas 12"
+                ]
+            },
+            pesantren: {
+                name: "Kepala Kepesantrenan",
+                leader: "Ustadz Ahmad Fauzi, Lc",
+                status: "online",
+                lastActivity: "5 menit yang lalu",
+                currentTask: "Monitoring Hafalan Al-Quran Santri",
+                projects: [
+                    { id: 7, name: "Program Tahfidz Intensif", progress: 80, deadline: "2024-02-28", priority: "high" },
+                    { id: 8, name: "Kajian Kitab Kuning", progress: 65, deadline: "2024-02-22", priority: "medium" },
+                    { id: 9, name: "Pelatihan Dai Muda", progress: 40, deadline: "2024-03-10", priority: "medium" }
+                ],
+                todayTasks: [
+                    "Setoran Hafalan Santri Baru",
+                    "Evaluasi Pembelajaran Fiqh",
+                    "Koordinasi dengan Asatidz"
+                ]
+            },
+            tu: {
+                name: "Tata Usaha",
+                leader: "Ibu Ratna Sari, S.Kom",
+                status: "online",
+                lastActivity: "1 menit yang lalu",
+                currentTask: "Input Data Siswa Baru 2024",
+                projects: [
+                    { id: 10, name: "Digitalisasi Arsip Sekolah", progress: 55, deadline: "2024-03-01", priority: "medium" },
+                    { id: 11, name: "Sistem Informasi Akademik", progress: 70, deadline: "2024-02-18", priority: "high" },
+                    { id: 12, name: "Persiapan Akreditasi", progress: 35, deadline: "2024-04-01", priority: "high" }
+                ],
+                todayTasks: [
+                    "Verifikasi Berkas Siswa",
+                    "Update Database Guru",
+                    "Laporan Bulanan ke Dinas"
+                ]
+            },
+            bendahara: {
+                name: "Bendahara",
+                leader: "Bapak Eko Prasetyo, S.E",
+                status: "online",
+                lastActivity: "10 menit yang lalu",
+                currentTask: "Rekonsiliasi Keuangan Januari 2024",
+                projects: [
+                    { id: 13, name: "Audit Internal Keuangan", progress: 90, deadline: "2024-02-12", priority: "high" },
+                    { id: 14, name: "Sistem Pembayaran Digital", progress: 25, deadline: "2024-03-20", priority: "medium" },
+                    { id: 15, name: "Laporan Keuangan Tahunan", progress: 60, deadline: "2024-02-28", priority: "high" }
+                ],
+                todayTasks: [
+                    "Verifikasi Pembayaran SPP",
+                    "Rekap Pengeluaran Operasional",
+                    "Meeting dengan Auditor"
+                ]
+            },
+            medsos: {
+                name: "Admin Media Sosial",
+                leader: "Saudara Dina Marlina, S.Ikom",
+                status: "online",
+                lastActivity: "3 menit yang lalu",
+                currentTask: "Posting Kegiatan Ekstrakurikuler",
+                projects: [
+                    { id: 16, name: "Campaign Penerimaan Siswa Baru", progress: 85, deadline: "2024-02-29", priority: "high" },
+                    { id: 17, name: "Website Sekolah Redesign", progress: 50, deadline: "2024-03-15", priority: "medium" },
+                    { id: 18, name: "Video Profil Sekolah", progress: 70, deadline: "2024-02-20", priority: "medium" }
+                ],
+                todayTasks: [
+                    "Post Instagram Stories",
+                    "Update Website Berita",
+                    "Editing Video Kegiatan"
+                ]
+            },
+            asrama: {
+                name: "Wali Asrama",
+                leader: "Ustadz Yusuf Hidayat, S.Pd.I",
+                status: "break",
+                lastActivity: "20 menit yang lalu",
+                currentTask: "Istirahat - Monitoring Asrama Putra",
+                projects: [
+                    { id: 19, name: "Renovasi Asrama Putri", progress: 40, deadline: "2024-03-30", priority: "high" },
+                    { id: 20, name: "Program Mentoring Santri", progress: 75, deadline: "2024-02-25", priority: "medium" },
+                    { id: 21, name: "Sistem Keamanan Asrama", progress: 20, deadline: "2024-04-15", priority: "low" }
+                ],
+                todayTasks: [
+                    "Inspeksi Kamar Santri",
+                    "Koordinasi dengan Security",
+                    "Evaluasi Kedisiplinan"
+                ]
+            }
+        };
+
+        let reportHistory = [];
+        let nextProjectId = 22;
+        let sheetsDataCount = 0;
+
+        // Google Sheets Configuration
+        let googleSheetsConfig = {
+            webAppUrl: localStorage.getItem('googleSheetsWebAppUrl') || '',
+            spreadsheetId: localStorage.getItem('googleSheetsSpreadsheetId') || '',
+            isConfigured: false
+        };
+
+        // Check if Google Sheets is configured
+        function checkGoogleSheetsConfig() {
+            googleSheetsConfig.isConfigured = googleSheetsConfig.webAppUrl !== '';
+            updateSheetsStatus();
+        }
+
+        // Update Google Sheets status indicator
+        function updateSheetsStatus() {
+            const statusDot = document.getElementById('sheetsStatus');
+            const statusText = document.getElementById('sheetsStatusText');
+            
+            if (googleSheetsConfig.isConfigured) {
+                statusDot.className = 'w-3 h-3 bg-green-500 rounded-full';
+                statusText.textContent = 'Google Sheets: Terhubung';
+            } else {
+                statusDot.className = 'w-3 h-3 bg-red-500 rounded-full';
+                statusText.textContent = 'Google Sheets: Belum Setup';
+            }
+        }
+
+        // Google Sheets Integration Functions
+        async function sendToGoogleSheets(reportData) {
+            if (!googleSheetsConfig.isConfigured) {
+                showNotification('Google Sheets belum dikonfigurasi', 'warning');
+                return false;
+            }
+
+            try {
+                showNotification('Mengirim data ke Google Sheets...', 'info');
+                
+                const response = await fetch(googleSheetsConfig.webAppUrl, {
+                    method: 'POST',
+                    mode: 'no-cors',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(reportData)
+                });
+                
+                // Increment sheets data counter
+                sheetsDataCount++;
+                document.getElementById('sheetsData').textContent = sheetsDataCount;
+                document.getElementById('sheetsCounter').textContent = sheetsDataCount;
+                localStorage.setItem('sheetsDataCount', sheetsDataCount.toString());
+                
+                console.log('Data sent to Google Sheets successfully');
+                return true;
+            } catch (error) {
+                console.error('Error sending to Google Sheets:', error);
+                showNotification('Gagal mengirim ke Google Sheets', 'error');
+                return false;
+            }
+        }
+
+        // Animate specific chart
+        function animateChart(chartId) {
+            switch(chartId) {
+                case 'approvedChart':
+                    animateApprovedChart();
+                    break;
+                case 'proposalChart':
+                    animateProposalChart();
+                    break;
+                case 'paymentChart':
+                    animatePaymentChart();
+                    break;
+                case 'eventsChart':
+                    animateEventsChart();
+                    break;
+            }
+        }
+
+        // Approved programs chart animation
+        function animateApprovedChart() {
+            const academicCount = parseInt(document.getElementById('academicApproved').textContent);
+            const pesantrenCount = parseInt(document.getElementById('pesantrenApproved').textContent);
+            const infraCount = parseInt(document.getElementById('infraApproved').textContent);
+            const total = academicCount + pesantrenCount + infraCount;
+            
+            setTimeout(() => {
+                document.getElementById('academicBar').style.width = `${(academicCount / total) * 100}%`;
+            }, 200);
+            setTimeout(() => {
+                document.getElementById('pesantrenBar').style.width = `${(pesantrenCount / total) * 100}%`;
+            }, 400);
+            setTimeout(() => {
+                document.getElementById('infraBar').style.width = `${(infraCount / total) * 100}%`;
+            }, 600);
+        }
+
+        // Proposal chart animation
+        function animateProposalChart() {
+            const buttons = document.querySelectorAll('#proposalChart button');
+            buttons.forEach((button, index) => {
+                setTimeout(() => {
+                    button.classList.add('animate-pulse');
+                    setTimeout(() => {
+                        button.classList.remove('animate-pulse');
+                    }, 500);
+                }, index * 200);
+            });
+        }
+
+        // Payment chart animation
+        function animatePaymentChart() {
+            const circle = document.getElementById('paymentCircle');
+            const paidStudents = parseInt(document.getElementById('paidStudents').textContent);
+            const totalStudents = 920; // Total santri
+            const percentage = (paidStudents / totalStudents) * 100;
+            
+            const circumference = 2 * Math.PI * 28;
+            const offset = circumference - (percentage / 100) * circumference;
+            
+            circle.style.strokeDashoffset = offset;
+        }
+
+        // Events chart animation
+        function animateEventsChart() {
+            const eventItems = document.querySelectorAll('#eventsChart > div');
+            eventItems.forEach((item, index) => {
+                setTimeout(() => {
+                    item.style.transform = 'translateX(5px)';
+                    setTimeout(() => {
+                        item.style.transform = 'translateX(0)';
+                    }, 200);
+                }, index * 150);
+            });
+        }
+
+        // Download file function
+        function downloadFile(filename) {
+            // Create a sample PDF content (in real implementation, this would be actual file data)
+            const sampleContent = `Sample content for ${filename}`;
+            const blob = new Blob([sampleContent], { type: 'application/pdf' });
+            const url = URL.createObjectURL(blob);
+            
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = filename;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+            
+            showNotification(`File ${filename} berhasil didownload!`);
+        }
+
+        // Calculate project statistics
+        function calculateProjectStats() {
+            let high = 0, medium = 0, low = 0, total = 0;
+            
+            Object.values(teamsData).forEach(team => {
+                team.projects.forEach(project => {
+                    total++;
+                    switch(project.priority) {
+                        case 'high': high++; break;
+                        case 'medium': medium++; break;
+                        case 'low': low++; break;
+                    }
+                });
+            });
+            
+            return { high, medium, low, total };
+        }
+
+        // Calculate average progress
+        function calculateAverageProgress() {
+            return Math.round(
+                Object.values(teamsData).reduce((sum, team) => {
+                    const teamAvg = team.projects.reduce((pSum, p) => pSum + p.progress, 0) / team.projects.length;
+                    return sum + teamAvg;
+                }, 0) / Object.keys(teamsData).length
+            );
+        }
+
+        // Calculate status distribution
+        function calculateStatusDistribution() {
+            const stats = { online: 0, meeting: 0, break: 0 };
+            Object.values(teamsData).forEach(team => {
+                if (team.status === 'online') stats.online++;
+                else if (team.status === 'meeting') stats.meeting++;
+                else if (team.status === 'break') stats.break++;
+            });
+            return stats;
+        }
+
+        // Animate performance chart
+        function animatePerformanceChart() {
+            const circle = document.getElementById('performanceCircle');
+            const performanceScore = parseInt(document.getElementById('performanceScore').textContent);
+            
+            const circumference = 2 * Math.PI * 40;
+            const offset = circumference - (performanceScore / 100) * circumference;
+            
+            circle.style.strokeDashoffset = offset;
+        }
+
+        // Initialize chart animations on page load
+        function initializeChartAnimations() {
+            setTimeout(() => {
+                animateApprovedChart();
+                animatePaymentChart();
+                animatePerformanceChart();
+            }, 1000);
+            
+            // Add hover effects to weekly trend bars
+            const bars = document.querySelectorAll('#weeklyTrend > div');
+            bars.forEach((bar, index) => {
+                bar.addEventListener('mouseenter', () => {
+                    bar.style.transform = 'scaleY(1.1)';
+                    bar.style.transformOrigin = 'bottom';
+                });
+                bar.addEventListener('mouseleave', () => {
+                    bar.style.transform = 'scaleY(1)';
+                });
+            });
+        }
+
+        // Setup Modal Functions
+        function openSetupModal() {
+            document.getElementById('setupModal').classList.remove('hidden');
+            // Pre-fill existing values
+            document.getElementById('webAppUrl').value = googleSheetsConfig.webAppUrl;
+            document.getElementById('spreadsheetId').value = googleSheetsConfig.spreadsheetId;
+        }
+
+        function closeSetupModal() {
+            document.getElementById('setupModal').classList.add('hidden');
+        }
+
+        function dismissBanner() {
+            document.getElementById('setupBanner').style.display = 'none';
+            localStorage.setItem('setupBannerDismissed', 'true');
+        }
+
+        function createSampleSheet() {
+            const headers = {
+                'Laporan_Tugas': 'Timestamp\tTanggal\tWaktu\tTim\tKepala Tim\tStatus\tAktivitas\tTugas Selesai',
+                'Update_Project': 'Timestamp\tTanggal\tTim\tProject\tProgress Lama\tProgress Baru\tUpdate\tKendala\tDeadline\tPrioritas',
+                'Project_Baru': 'Timestamp\tTanggal\tTim\tNama Project\tDeskripsi\tDeadline\tPrioritas\tProgress Awal'
+            };
+            
+            let allHeaders = '';
+            Object.entries(headers).forEach(([sheetName, header]) => {
+                allHeaders += `=== ${sheetName} ===\n${header}\n\n`;
+            });
+            
+            navigator.clipboard.writeText(allHeaders).then(() => {
+                showNotification('Template headers berhasil di-copy! Paste di spreadsheet Anda.');
+            });
+        }
+
+        function copyAppsScript() {
+            const code = document.getElementById('appsScriptCode').textContent;
+            navigator.clipboard.writeText(code).then(() => {
+                showNotification('Apps Script code berhasil di-copy!');
+            });
+        }
+
+        async function testConnection() {
+            const webAppUrl = document.getElementById('webAppUrl').value;
+            const testResult = document.getElementById('testResult');
+            
+            if (!webAppUrl) {
+                testResult.innerHTML = '<span class="text-red-600">❌ Masukkan Web App URL terlebih dahulu</span>';
+                return;
+            }
+            
+            testResult.innerHTML = '<span class="text-blue-600">🔄 Testing koneksi...</span>';
+            
+            try {
+                const testData = {
+                    timestamp: new Date().toLocaleString('id-ID'),
+                    date: new Date().toLocaleDateString('id-ID'),
+                    time: new Date().toLocaleTimeString('id-ID'),
+                    team: 'Test Team',
+                    leader: 'Test User',
+                    status: 'online',
+                    currentActivity: 'Testing koneksi Google Sheets',
+                    completedTasks: 'Test koneksi berhasil',
+                    sheetName: 'Laporan_Tugas'
+                };
+                
+                await fetch(webAppUrl, {
+                    method: 'POST',
+                    mode: 'no-cors',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(testData)
+                });
+                
+                testResult.innerHTML = '<span class="text-green-600">✅ Koneksi berhasil! Cek spreadsheet Anda untuk data test.</span>';
+            } catch (error) {
+                testResult.innerHTML = '<span class="text-red-600">❌ Koneksi gagal: ' + error.message + '</span>';
+            }
+        }
+
+        function saveGoogleSheetsConfig() {
+            const webAppUrl = document.getElementById('webAppUrl').value;
+            const spreadsheetId = document.getElementById('spreadsheetId').value;
+            
+            if (!webAppUrl) {
+                showNotification('Web App URL harus diisi!', 'error');
+                return;
+            }
+            
+            // Save to localStorage
+            localStorage.setItem('googleSheetsWebAppUrl', webAppUrl);
+            localStorage.setItem('googleSheetsSpreadsheetId', spreadsheetId);
+            
+            // Update config
+            googleSheetsConfig.webAppUrl = webAppUrl;
+            googleSheetsConfig.spreadsheetId = spreadsheetId;
+            googleSheetsConfig.isConfigured = true;
+            
+            updateSheetsStatus();
+            closeSetupModal();
+            dismissBanner();
+            
+            showNotification('Konfigurasi Google Sheets berhasil disimpan!');
+        }
+
+        // Show notification
+        function showNotification(message, type = 'success') {
+            const notification = document.getElementById('notification');
+            const notificationText = document.getElementById('notificationText');
+            
+            notificationText.textContent = message;
+            let bgColor = 'bg-green-500';
+            if (type === 'error') bgColor = 'bg-red-500';
+            else if (type === 'warning') bgColor = 'bg-yellow-500';
+            else if (type === 'info') bgColor = 'bg-blue-500';
+            
+            notification.className = `fixed top-4 right-4 px-6 py-3 rounded-lg shadow-lg notification ${bgColor} text-white`;
+            notification.classList.remove('hidden');
+            
+            setTimeout(() => {
+                notification.classList.add('hidden');
+            }, 3000);
+        }
+
+        // Render team cards
+        function renderTeamCards() {
+            const teamGrid = document.getElementById('teamGrid');
+            const statusFilter = document.getElementById('statusFilter').value;
+            const teamFilter = document.getElementById('teamFilter').value;
+            
+            teamGrid.innerHTML = '';
+            
+            Object.entries(teamsData).forEach(([key, team]) => {
+                // Apply filters
+                if (statusFilter !== 'all' && team.status !== statusFilter) return;
+                if (teamFilter !== 'all' && key !== teamFilter) return;
+                
+                const avgProgress = Math.round(team.projects.reduce((sum, p) => sum + p.progress, 0) / team.projects.length);
+                const statusColor = {
+                    'online': 'bg-green-500',
+                    'meeting': 'bg-blue-500',
+                    'break': 'bg-yellow-500'
+                };
+                
+                const statusText = {
+                    'online': 'Sedang Bekerja',
+                    'meeting': 'Rapat',
+                    'break': 'Istirahat'
+                };
+                
+                const card = document.createElement('div');
+                card.className = 'team-card bg-white rounded-xl shadow-md p-6 cursor-pointer';
+                card.onclick = () => openDetailModal(key);
+                
+                card.innerHTML = `
+                    <div class="flex items-center justify-between mb-4">
+                        <div class="flex items-center space-x-3">
+                            <div class="w-12 h-12 bg-gradient-to-r from-blue-500 to-purple-600 rounded-full flex items-center justify-center text-white font-bold">
+                                ${team.leader.split(' ')[0].charAt(0)}${team.leader.split(' ')[1] ? team.leader.split(' ')[1].charAt(0) : ''}
+                            </div>
+                            <div>
+                                <h3 class="font-semibold text-gray-800">${team.name}</h3>
+                                <p class="text-sm text-gray-600">${team.leader}</p>
+                            </div>
+                        </div>
+                        <div class="flex items-center space-x-2">
+                            <div class="w-3 h-3 ${statusColor[team.status]} rounded-full ${team.status === 'online' ? 'status-online' : ''}"></div>
+                            <span class="text-sm font-medium text-gray-700">${statusText[team.status]}</span>
+                        </div>
+                    </div>
+                    
+                    <div class="mb-4">
+                        <p class="text-sm text-gray-600 mb-1">Aktivitas Saat Ini:</p>
+                        <p class="font-medium text-gray-800">${team.currentTask}</p>
+                        <p class="text-xs text-gray-500 mt-1">${team.lastActivity}</p>
+                    </div>
+                    
+                    <div class="mb-4">
+                        <div class="flex justify-between items-center mb-2">
+                            <span class="text-sm font-medium text-gray-700">Progress Rata-rata</span>
+                            <span class="text-sm font-bold text-blue-600">${avgProgress}%</span>
+                        </div>
+                        <div class="w-full bg-gray-200 rounded-full h-2">
+                            <div class="progress-bar bg-gradient-to-r from-blue-500 to-purple-600 h-2 rounded-full" style="width: ${avgProgress}%"></div>
+                        </div>
+                    </div>
+                    
+                    <div class="flex justify-between items-center text-sm">
+                        <span class="text-gray-600">${team.projects.length} Project Aktif</span>
+                        <span class="text-blue-600 font-medium hover:text-blue-800">Lihat Detail →</span>
+                    </div>
+                `;
+                
+                teamGrid.appendChild(card);
+            });
+        }
+
+        // Open input modal
+        function openInputModal() {
+            document.getElementById('inputModal').classList.remove('hidden');
+            document.getElementById('reportForm').reset();
+            hideAllSections();
+        }
+
+        // Close input modal
+        function closeInputModal() {
+            document.getElementById('inputModal').classList.add('hidden');
+        }
+
+        // Hide all form sections
+        function hideAllSections() {
+            document.getElementById('taskSection').classList.add('hidden');
+            document.getElementById('projectSection').classList.add('hidden');
+            document.getElementById('newProjectSection').classList.add('hidden');
+        }
+
+        // Handle report type change
+        document.addEventListener('change', function(e) {
+            if (e.target.name === 'reportType') {
+                hideAllSections();
+                const reportType = e.target.value;
+                
+                if (reportType === 'task') {
+                    document.getElementById('taskSection').classList.remove('hidden');
+                } else if (reportType === 'project') {
+                    document.getElementById('projectSection').classList.remove('hidden');
+                    updateProjectSelect();
+                } else if (reportType === 'new_project') {
+                    document.getElementById('newProjectSection').classList.remove('hidden');
+                }
+            }
+            
+            if (e.target.id === 'teamSelect') {
+                updateProjectSelect();
+            }
+        });
+
+        // Update project select based on selected team
+        function updateProjectSelect() {
+            const teamKey = document.getElementById('teamSelect').value;
+            const projectSelect = document.getElementById('projectSelect');
+            
+            projectSelect.innerHTML = '<option value="">-- Pilih Project --</option>';
+            
+            if (teamKey && teamsData[teamKey]) {
+                teamsData[teamKey].projects.forEach(project => {
+                    const option = document.createElement('option');
+                    option.value = project.id;
+                    option.textContent = project.name;
+                    projectSelect.appendChild(option);
+                });
+            }
+        }
+
+        // Handle progress slider changes
+        document.getElementById('progressSlider').addEventListener('input', function(e) {
+            document.getElementById('progressValue').textContent = e.target.value + '%';
+        });
+
+        document.getElementById('newProgressSlider').addEventListener('input', function(e) {
+            document.getElementById('newProgressValue').textContent = e.target.value + '%';
+        });
+
+        // Handle form submission
+        document.getElementById('reportForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const formData = new FormData(e.target);
+            const reportType = formData.get('reportType');
+            const teamKey = formData.get('teamSelect') || document.getElementById('teamSelect').value;
+            
+            if (!teamKey) {
+                showNotification('Pilih tim terlebih dahulu!', 'error');
+                return;
+            }
+            
+            const team = teamsData[teamKey];
+            const timestamp = new Date().toLocaleString('id-ID');
+            const dateOnly = new Date().toLocaleDateString('id-ID');
+            const timeOnly = new Date().toLocaleTimeString('id-ID');
+            
+            let reportData = {
+                timestamp: timestamp,
+                date: dateOnly,
+                time: timeOnly,
+                team: team.name,
+                leader: team.leader,
+                reportType: reportType
+            };
+            
+            if (reportType === 'task') {
+                // Update task report
+                const status = document.getElementById('currentStatus').value;
+                const activity = document.getElementById('currentActivity').value;
+                const completed = document.getElementById('completedTasks').value;
+                const tomorrow = document.getElementById('tomorrowTasks').value;
+                
+                team.status = status;
+                team.currentTask = activity || team.currentTask;
+                team.lastActivity = 'Baru saja';
+                
+                if (completed) {
+                    team.todayTasks = completed.split('\n').filter(task => task.trim());
+                }
+                
+                // Prepare data for Google Sheets
+                reportData = {
+                    ...reportData,
+                    status: status,
+                    currentActivity: activity,
+                    completedTasks: completed.replace(/\n/g, '; '),
+                    tomorrowTasks: tomorrow.replace(/\n/g, '; '),
+                    sheetName: 'Laporan_Tugas'
+                };
+                
+                reportHistory.push({
+                    type: 'task',
+                    team: team.name,
+                    timestamp,
+                    data: { status, activity, completed, tomorrow }
+                });
+                
+                // Send to Google Sheets
+                const success = await sendToGoogleSheets(reportData);
+                if (success) {
+                    showNotification('Laporan tugas harian berhasil dikirim ke Google Sheets!');
+                } else {
+                    showNotification('Laporan tersimpan lokal, Google Sheets gagal', 'warning');
+                }
+                
+            } else if (reportType === 'project') {
+                // Update project progress
+                const projectId = parseInt(document.getElementById('projectSelect').value);
+                const progress = parseInt(document.getElementById('progressSlider').value);
+                const update = document.getElementById('progressUpdate').value;
+                const obstacles = document.getElementById('obstacles').value;
+                
+                const project = team.projects.find(p => p.id === projectId);
+                if (project) {
+                    const oldProgress = project.progress;
+                    project.progress = progress;
+                    team.lastActivity = 'Baru saja';
+                    
+                    // Prepare data for Google Sheets
+                    reportData = {
+                        ...reportData,
+                        projectName: project.name,
+                        projectId: project.id,
+                        oldProgress: oldProgress,
+                        newProgress: progress,
+                        progressUpdate: update,
+                        obstacles: obstacles,
+                        deadline: project.deadline,
+                        priority: project.priority,
+                        sheetName: 'Update_Project'
+                    };
+                    
+                    reportHistory.push({
+                        type: 'project_update',
+                        team: team.name,
+                        timestamp,
+                        data: { projectName: project.name, progress, update, obstacles }
+                    });
+                    
+                    // Send to Google Sheets
+                    const success = await sendToGoogleSheets(reportData);
+                    if (success) {
+                        showNotification(`Progress ${project.name} berhasil diupdate di Google Sheets!`);
+                    } else {
+                        showNotification('Update tersimpan lokal, Google Sheets gagal', 'warning');
+                    }
+                }
+                
+            } else if (reportType === 'new_project') {
+                // Add new project
+                const name = document.getElementById('newProjectName').value;
+                const desc = document.getElementById('newProjectDesc').value;
+                const deadline = document.getElementById('newProjectDeadline').value;
+                const priority = document.getElementById('newProjectPriority').value;
+                const progress = parseInt(document.getElementById('newProgressSlider').value);
+                
+                const newProject = {
+                    id: nextProjectId++,
+                    name,
+                    progress,
+                    deadline,
+                    priority,
+                    description: desc
+                };
+                
+                team.projects.push(newProject);
+                team.lastActivity = 'Baru saja';
+                
+                // Prepare data for Google Sheets
+                reportData = {
+                    ...reportData,
+                    projectId: newProject.id,
+                    projectName: name,
+                    projectDescription: desc,
+                    deadline: deadline,
+                    priority: priority,
+                    initialProgress: progress,
+                    sheetName: 'Project_Baru'
+                };
+                
+                reportHistory.push({
+                    type: 'new_project',
+                    team: team.name,
+                    timestamp,
+                    data: newProject
+                });
+                
+                // Send to Google Sheets
+                const success = await sendToGoogleSheets(reportData);
+                if (success) {
+                    showNotification(`Project baru "${name}" berhasil ditambahkan ke Google Sheets!`);
+                } else {
+                    showNotification('Project tersimpan lokal, Google Sheets gagal', 'warning');
+                }
+            }
+            
+            // Update dashboard
+            renderTeamCards();
+            updateSummaryCards();
+            closeInputModal();
+        });
+
+        // Open detail modal
+        function openDetailModal(teamKey) {
+            const team = teamsData[teamKey];
+            const modal = document.getElementById('detailModal');
+            const modalTitle = document.getElementById('modalTitle');
+            const modalContent = document.getElementById('modalContent');
+            
+            modalTitle.textContent = `Detail ${team.name}`;
+            
+            const highPriorityProjects = team.projects.filter(p => p.priority === 'high').length;
+            const completedTasks = Math.floor(Math.random() * 5) + 3;
+            
+            modalContent.innerHTML = `
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6">
+                    <!-- Info Tim -->
+                    <div class="space-y-4 sm:space-y-6">
+                        <div class="bg-gray-50 rounded-lg p-3 sm:p-4">
+                            <h4 class="font-semibold text-gray-800 mb-3 text-sm sm:text-base">Informasi Tim</h4>
+                            <div class="space-y-2">
+                                <div class="flex flex-col sm:flex-row sm:justify-between gap-1">
+                                    <span class="text-gray-600 text-sm">Kepala Tim:</span>
+                                    <span class="font-medium text-sm">${team.leader}</span>
+                                </div>
+                                <div class="flex flex-col sm:flex-row sm:justify-between gap-1">
+                                    <span class="text-gray-600 text-sm">Status:</span>
+                                    <span class="font-medium text-sm">${team.status === 'online' ? 'Sedang Bekerja' : team.status === 'meeting' ? 'Rapat' : 'Istirahat'}</span>
+                                </div>
+                                <div class="flex flex-col sm:flex-row sm:justify-between gap-1">
+                                    <span class="text-gray-600 text-sm">Aktivitas Terakhir:</span>
+                                    <span class="font-medium text-sm">${team.lastActivity}</span>
+                                </div>
+                                <div class="flex flex-col sm:flex-row sm:justify-between gap-1">
+                                    <span class="text-gray-600 text-sm">Tugas Selesai Hari Ini:</span>
+                                    <span class="font-medium text-green-600 text-sm">${completedTasks}</span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Tugas Hari Ini -->
+                        <div class="bg-blue-50 rounded-lg p-3 sm:p-4">
+                            <h4 class="font-semibold text-gray-800 mb-3 text-sm sm:text-base">Tugas Hari Ini</h4>
+                            <ul class="space-y-2">
+                                ${team.todayTasks.map(task => `
+                                    <li class="flex items-start space-x-2">
+                                        <div class="w-2 h-2 bg-blue-500 rounded-full mt-1.5 flex-shrink-0"></div>
+                                        <span class="text-gray-700 text-sm">${task}</span>
+                                    </li>
+                                `).join('')}
+                            </ul>
+                        </div>
+                    </div>
+                    
+                    <!-- Project Details -->
+                    <div>
+                        <h4 class="font-semibold text-gray-800 mb-4 text-sm sm:text-base">Project yang Sedang Berjalan</h4>
+                        <div class="space-y-3 sm:space-y-4">
+                            ${team.projects.map(project => {
+                                const priorityColor = {
+                                    'high': 'bg-red-100 text-red-800',
+                                    'medium': 'bg-yellow-100 text-yellow-800',
+                                    'low': 'bg-green-100 text-green-800'
+                                };
+                                
+                                const priorityText = {
+                                    'high': 'Tinggi',
+                                    'medium': 'Sedang',
+                                    'low': 'Rendah'
+                                };
+                                
+                                return `
+                                    <div class="border border-gray-200 rounded-lg p-3 sm:p-4">
+                                        <div class="flex flex-col sm:flex-row sm:justify-between sm:items-start mb-2 gap-2">
+                                            <h5 class="font-medium text-gray-800 text-sm sm:text-base flex-1">${project.name}</h5>
+                                            <span class="px-2 py-1 rounded-full text-xs font-medium ${priorityColor[project.priority]} self-start">
+                                                ${priorityText[project.priority]}
+                                            </span>
+                                        </div>
+                                        <div class="mb-3">
+                                            <div class="flex justify-between items-center mb-1">
+                                                <span class="text-xs sm:text-sm text-gray-600">Progress</span>
+                                                <span class="text-xs sm:text-sm font-medium">${project.progress}%</span>
+                                            </div>
+                                            <div class="w-full bg-gray-200 rounded-full h-2">
+                                                <div class="bg-blue-500 h-2 rounded-full" style="width: ${project.progress}%"></div>
+                                            </div>
+                                        </div>
+                                        <div class="flex flex-col sm:flex-row sm:justify-between gap-1">
+                                            <span class="text-gray-600 text-xs sm:text-sm">Deadline:</span>
+                                            <span class="font-medium text-xs sm:text-sm">${new Date(project.deadline).toLocaleDateString('id-ID')}</span>
+                                        </div>
+                                    </div>
+                                `;
+                            }).join('')}
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Action Buttons -->
+                <div class="mt-4 sm:mt-6 pt-4 sm:pt-6 border-t border-gray-200 flex flex-col sm:flex-row justify-end gap-3">
+                    <button onclick="sendMessage('${teamKey}')" class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors text-sm sm:text-base">
+                        Kirim Pesan
+                    </button>
+                    <button onclick="scheduleCall('${teamKey}')" class="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors text-sm sm:text-base">
+                        Jadwalkan Call
+                    </button>
+                </div>
+            `;
+            
+            modal.classList.remove('hidden');
+        }
+
+        // Close modal
+        function closeModal() {
+            document.getElementById('detailModal').classList.add('hidden');
+        }
+
+        // Send message function
+        function sendMessage(teamKey) {
+            const team = teamsData[teamKey];
+            showNotification(`Pesan dikirim ke ${team.leader}`);
+            closeModal();
+        }
+
+        // Schedule call function
+        function scheduleCall(teamKey) {
+            const team = teamsData[teamKey];
+            showNotification(`Call dijadwalkan dengan ${team.leader}`);
+            closeModal();
+        }
+
+        // Auto refresh functionality
+        let autoRefreshInterval;
+        let isAutoRefreshOn = true;
+
+        function toggleAutoRefresh() {
+            const button = document.getElementById('autoRefresh');
+            if (isAutoRefreshOn) {
+                clearInterval(autoRefreshInterval);
+                button.textContent = 'OFF';
+                button.classList.remove('bg-blue-600', 'hover:bg-blue-700');
+                button.classList.add('bg-gray-600', 'hover:bg-gray-700');
+                isAutoRefreshOn = false;
+            } else {
+                startAutoRefresh();
+                button.textContent = 'ON';
+                button.classList.remove('bg-gray-600', 'hover:bg-gray-700');
+                button.classList.add('bg-blue-600', 'hover:bg-blue-700');
+                isAutoRefreshOn = true;
+            }
+        }
+
+        function startAutoRefresh() {
+            autoRefreshInterval = setInterval(() => {
+                // Simulasi update data real-time
+                Object.keys(teamsData).forEach(key => {
+                    const team = teamsData[key];
+                    // Update progress secara random (simulasi)
+                    team.projects.forEach(project => {
+                        if (Math.random() > 0.95) { // 5% chance of progress update
+                            project.progress = Math.min(100, project.progress + Math.floor(Math.random() * 3));
+                        }
+                    });
+                    
+                    // Update last activity time
+                    if (team.lastActivity !== 'Baru saja') {
+                        const minutes = Math.floor(Math.random() * 30) + 1;
+                        team.lastActivity = `${minutes} menit yang lalu`;
+                    }
+                });
+                
+                renderTeamCards();
+                updateSummaryCards();
+            }, 30000); // Update every 30 seconds
+        }
+
+        // Update summary cards with animations
+        function updateSummaryCards() {
+            const statusStats = calculateStatusDistribution();
+            
+            // Update status distribution
+            document.getElementById('workingCount').textContent = statusStats.online;
+            document.getElementById('meetingCount').textContent = statusStats.meeting;
+            document.getElementById('breakCount').textContent = statusStats.break;
+            
+            // Update performance score
+            const avgProgress = calculateAverageProgress();
+            const performanceScore = Math.round((avgProgress + (statusStats.online / Object.keys(teamsData).length * 100)) / 2);
+            document.getElementById('performanceScore').textContent = performanceScore;
+            
+            // Animate charts
+            setTimeout(() => animateApprovedChart(), 100);
+            setTimeout(() => animatePaymentChart(), 300);
+            setTimeout(() => animatePerformanceChart(), 500);
+        }
+
+        // Event listeners
+        document.getElementById('statusFilter').addEventListener('change', renderTeamCards);
+        document.getElementById('teamFilter').addEventListener('change', renderTeamCards);
+        document.getElementById('autoRefresh').addEventListener('click', toggleAutoRefresh);
+
+        // Close modals when clicking outside
+        document.getElementById('detailModal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeModal();
+            }
+        });
+
+        document.getElementById('inputModal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeInputModal();
+            }
+        });
+
+        document.getElementById('setupModal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeSetupModal();
+            }
+        });
+
+        // Initialize dashboard
+        function initializeDashboard() {
+            // Load saved data
+            sheetsDataCount = parseInt(localStorage.getItem('sheetsDataCount')) || 0;
+            document.getElementById('sheetsData').textContent = sheetsDataCount;
+            document.getElementById('sheetsCounter').textContent = sheetsDataCount;
+            
+            // Check if setup banner should be hidden
+            if (localStorage.getItem('setupBannerDismissed') === 'true' || googleSheetsConfig.webAppUrl) {
+                document.getElementById('setupBanner').style.display = 'none';
+            }
+            
+            checkGoogleSheetsConfig();
+            renderTeamCards();
+            updateSummaryCards();
+            startAutoRefresh();
+            initializeChartAnimations();
+        }
+
+        // Initialize when page loads
+        initializeDashboard();
+    </script>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'973f707e4678d9e8',t:'MTc1NjAwMjc0OS4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
