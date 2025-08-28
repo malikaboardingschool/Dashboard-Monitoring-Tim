@@ -57,11 +57,11 @@
         <!-- KARTU STATISTIK -->
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-8">
             <!-- Program List -->
-            <div class="chart-card bg-gradient-to-br from-violet-200 to-purple-300 rounded-2xl shadow-lg p-6">
+            <div class="chart-card bg-emerald-600 rounded-2xl shadow-lg p-6">
                 <div class="flex items-center justify-between mb-4">
                     <div>
-                        <p class="text-sm font-medium text-purple-800">Program List</p>
-                        <p class="text-4xl font-bold text-purple-900" id="approvedPrograms"><span class="skeleton-card w-12 h-8 inline-block"></span></p>
+                        <p class="text-sm font-medium text-emerald-200">Program List</p>
+                        <p class="text-4xl font-bold text-white" id="approvedPrograms"><span class="skeleton-card w-12 h-8 inline-block"></span></p>
                     </div>
                 </div>
                 <div class="space-y-2 text-sm" id="programListContainer"><div class="skeleton-card w-full h-5"></div><div class="skeleton-card w-full h-5"></div><div class="skeleton-card w-full h-5"></div></div>
@@ -165,12 +165,12 @@
             if (summary.programList && summary.programList.length > 0) {
                  summary.programList.forEach(prog => {
                     const progDiv = document.createElement('div');
-                    progDiv.className = 'text-xs border-b border-purple-200 pb-2 mb-2';
-                    progDiv.innerHTML = `<div class="flex justify-between items-center"><p class="font-bold text-purple-900 text-sm">${prog.nama}</p><span class="font-medium text-green-800 bg-green-100 px-2 py-0.5 rounded-full">${prog.status}</span></div><div class="flex justify-between text-purple-700 mt-1"><span>${prog.kategori}</span><span>Oleh: ${prog.tim}</span></div>`;
+                    progDiv.className = 'text-xs border-b border-emerald-500 pb-2 mb-2';
+                    progDiv.innerHTML = `<div class="flex justify-between items-center"><p class="font-bold text-white text-sm">${prog.nama}</p><span class="font-medium text-emerald-800 bg-emerald-200 px-2 py-0.5 rounded-full">${prog.status}</span></div><div class="flex justify-between text-emerald-100 mt-1"><span>${prog.kategori}</span><span>Oleh: ${prog.tim}</span></div>`;
                     programListContainer.appendChild(progDiv);
                 });
             } else {
-                programListContainer.innerHTML = `<p class="text-xs text-purple-500 italic">Belum ada program yang disetujui.</p>`;
+                programListContainer.innerHTML = `<p class="text-xs text-emerald-100 italic">Belum ada program yang disetujui.</p>`;
             }
 
             document.getElementById('paidStudents').textContent = summary.paidStudents;
@@ -205,9 +205,13 @@
                 container.innerHTML = `<p class="text-gray-600">Belum ada data tim di spreadsheet 'Tugas_Tim'.</p>`;
                 return;
             }
-
+            
+            const mobileSelect = document.createElement('select');
+            mobileSelect.id = 'team-select-mobile';
+            mobileSelect.className = 'block sm:hidden w-full p-3 border border-gray-300 rounded-lg mb-4';
+            
             const tabNav = document.createElement('div');
-            tabNav.className = 'flex border-b border-gray-200 overflow-x-auto whitespace-nowrap mb-4';
+            tabNav.className = 'hidden sm:flex border-b border-gray-200 overflow-x-auto whitespace-nowrap mb-4';
             
             const tabContentContainer = document.createElement('div');
             
@@ -216,6 +220,11 @@
                 if (!teams[teamName]) continue;
                 const team = teams[teamName];
                 const teamId = teamName.replace(/\s+/g, '-');
+
+                const option = document.createElement('option');
+                option.value = `tab-${teamId}`;
+                option.textContent = teamName;
+                mobileSelect.appendChild(option);
 
                 const tabButton = document.createElement('button');
                 tabButton.textContent = teamName;
@@ -229,17 +238,11 @@
                 
                 const renderList = (title, items, type, color) => {
                     let listHtml = `<div class="p-4"><h4 class="font-semibold text-sm ${color} mb-2">${title} (${items.length})</h4><ul class="space-y-1.5 text-sm max-h-32 overflow-y-auto pr-2 task-list">`;
-                    if (items.length === 0) {
-                        listHtml += `<li class="text-gray-400 italic text-xs">Tidak ada tugas</li>`;
-                    } else {
+                    if (items.length === 0) { listHtml += `<li class="text-gray-400 italic text-xs">Tidak ada tugas</li>`; } else {
                         items.forEach(item => {
-                            if (type === 'selesai' && item.link) {
-                                listHtml += `<li><a href="${item.link}" target="_blank" class="text-blue-600 hover:underline flex items-start gap-2"><svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 flex-shrink-0 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1" /></svg><span>${item.deskripsi}</span></a></li>`;
-                            } else if (type === 'inProgress' && item.deadline) {
-                                listHtml += `<li class="flex justify-between items-start gap-2"><span>${item.deskripsi}</span> <span class="text-xs font-medium text-red-500 bg-red-100 px-2 py-0.5 rounded-full flex-shrink-0">${item.deadline}</span></li>`;
-                            } else {
-                                listHtml += `<li>${item.deskripsi}</li>`;
-                            }
+                            if (type === 'selesai' && item.link) { listHtml += `<li><a href="${item.link}" target="_blank" class="text-blue-600 hover:underline flex items-start gap-2"><svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 flex-shrink-0 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1" /></svg><span>${item.deskripsi}</span></a></li>`;
+                            } else if (type === 'inProgress' && item.deadline) { listHtml += `<li class="flex justify-between items-start gap-2"><span>${item.deskripsi}</span> <span class="text-xs font-medium text-red-500 bg-red-100 px-2 py-0.5 rounded-full flex-shrink-0">${item.deadline}</span></li>`;
+                            } else { listHtml += `<li>${item.deskripsi}</li>`; }
                         });
                     }
                     listHtml += `</ul></div>`;
@@ -252,9 +255,7 @@
                         komentar.slice().reverse().forEach(k => {
                             komentarHtml += `<div class="bg-blue-50 p-2 rounded-md text-xs"><p class="text-gray-800">${k.teks}</p><p class="text-right text-gray-500 mt-1">${k.timestamp}</p></div>`;
                         });
-                    } else {
-                        komentarHtml += `<p class="text-gray-400 italic text-xs">Belum ada komentar.</p>`;
-                    }
+                    } else { komentarHtml += `<p class="text-gray-400 italic text-xs">Belum ada komentar.</p>`; }
                     komentarHtml += `</div></div>`;
                     return komentarHtml;
                 };
@@ -275,16 +276,25 @@
                 isFirstTab = false;
             }
 
+            container.appendChild(mobileSelect);
             container.appendChild(tabNav);
             container.appendChild(tabContentContainer);
+
+            const switchTab = (targetId) => {
+                tabContentContainer.querySelectorAll('.tab-content').forEach(content => content.classList.add('hidden'));
+                document.getElementById(targetId).classList.remove('hidden');
+            };
 
             tabNav.addEventListener('click', (e) => {
                 if (e.target.tagName === 'BUTTON') {
                     tabNav.querySelectorAll('button').forEach(btn => btn.className = 'py-2 px-4 text-sm font-medium border-b-2 border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300');
-                    tabContentContainer.querySelectorAll('.tab-content').forEach(content => content.classList.add('hidden'));
                     e.target.className = 'py-2 px-4 text-sm font-medium border-b-2 transition-colors duration-300 tab-active';
-                    document.getElementById(e.target.dataset.target).classList.remove('hidden');
+                    switchTab(e.target.dataset.target);
                 }
+            });
+
+            mobileSelect.addEventListener('change', (e) => {
+                switchTab(e.target.value);
             });
         }
 
