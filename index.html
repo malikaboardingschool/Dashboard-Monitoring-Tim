@@ -8,41 +8,26 @@
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
         body { font-family: 'Inter', sans-serif; }
-        .notification {
-            animation: slideIn 0.3s ease-out;
-        }
-        @keyframes slideIn {
-            from { transform: translateY(-100%); opacity: 0; }
-            to { transform: translateY(0); opacity: 1; }
-        }
-        .skeleton-card {
-            background-color: #f1f5f9;
-            border-radius: 0.75rem;
-            animation: pulse 1.5s cubic-bezier(0.4, 0, 0.6, 1) infinite;
-        }
-        @keyframes pulse {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0.7; }
-        }
-        /* Custom scrollbar for task lists */
-        .task-list::-webkit-scrollbar {
-            width: 5px;
-        }
-        .task-list::-webkit-scrollbar-track {
-            background: #f1f1f1;
-            border-radius: 10px;
-        }
-        .task-list::-webkit-scrollbar-thumb {
-            background: #a5b4fc;
-            border-radius: 10px;
-        }
-        .task-list::-webkit-scrollbar-thumb:hover {
-            background: #818cf8;
-        }
+        .notification { animation: slideIn 0.3s ease-out; }
+        @keyframes slideIn { from { transform: translateY(-100%); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+        .skeleton-card { background-color: #f1f5f9; border-radius: 0.75rem; animation: pulse 1.5s cubic-bezier(0.4, 0, 0.6, 1) infinite; }
+        @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.7; } }
+        .task-list::-webkit-scrollbar { width: 5px; }
+        .task-list::-webkit-scrollbar-track { background: #f1f1f1; border-radius: 10px; }
+        .task-list::-webkit-scrollbar-thumb { background: #a5b4fc; border-radius: 10px; }
+        .task-list::-webkit-scrollbar-thumb:hover { background: #818cf8; }
         .chart-card { transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1); }
         .chart-card:hover { transform: translateY(-8px) scale(1.02); box-shadow: 0 20px 40px rgba(0,0,0,0.15); }
         .floating-animation { animation: float 3s ease-in-out infinite; }
         @keyframes float { 0%, 100% { transform: translateY(0px); } 50% { transform: translateY(-10px); } }
+        .tab-content { animation: fadeIn 0.5s ease-in-out; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        /* Style for active tab */
+        .tab-active {
+            border-color: #3b82f6; /* blue-500 */
+            background-color: #eff6ff; /* blue-50 */
+            color: #2563eb; /* blue-600 */
+        }
     </style>
 </head>
 <body class="bg-gray-100">
@@ -51,8 +36,8 @@
         <div class="max-w-screen-2xl mx-auto px-4 sm:px-6 py-4">
             <div class="flex flex-col sm:flex-row justify-between items-center gap-4">
                 <div class="flex-1">
-                    <h1 class="text-xl sm:text-2xl lg:text-3xl font-bold text-gray-800">Dashboard Monitoring Tim</h1>
-                    <p class="text-sm sm:text-base text-gray-600 mt-1">Malika Islamic Boarding School</p>
+                    <h1 class="text-xl sm:text-2xl lg:text-3xl font-bold text-gray-800">Monitoring Tim</h1>
+                    <p class="text-sm sm:text-base text-gray-900 mt-1">Malika Boarding School</p>
                 </div>
                  <div class="flex items-center gap-3">
                     <div id="sheetsStatus" class="w-3 h-3 bg-yellow-500 rounded-full animate-pulse"></div>
@@ -67,9 +52,8 @@
 
     <!-- Main Dashboard -->
     <main class="max-w-screen-2xl mx-auto px-4 sm:px-6 py-6 sm:py-8">
-        <!-- KARTU STATISTIK (VERSI SIMPLE) -->
+        <!-- KARTU STATISTIK -->
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
-            <!-- Program List -->
             <div class="chart-card bg-gradient-to-br from-blue-700 to-indigo-900 rounded-xl shadow-lg p-6">
                 <div class="flex items-center justify-between mb-4">
                     <div>
@@ -77,38 +61,25 @@
                         <p class="text-4xl font-bold text-white" id="approvedPrograms"><span class="skeleton-card w-12 h-8 inline-block"></span></p>
                     </div>
                 </div>
-                <div class="space-y-2 text-sm" id="programListContainer">
-                    <div class="skeleton-card w-full h-5"></div>
-                    <div class="skeleton-card w-full h-5"></div>
-                    <div class="skeleton-card w-full h-5"></div>
-                </div>
+                <div class="space-y-2 text-sm" id="programListContainer"><div class="skeleton-card w-full h-5"></div><div class="skeleton-card w-full h-5"></div><div class="skeleton-card w-full h-5"></div></div>
             </div>
-            <!-- Pembayaran SPP -->
-            <div class="chart-card bg-gradient-to-br from-red-500 to-rose-700 rounded-xl shadow-lg p-6">
-                <p class="text-base font-medium text-red-200 mb-2">Pembayaran SPP</p>
+            <div class="chart-card bg-gradient-to-br from-sky-400 to-cyan-500 rounded-xl shadow-lg p-6">
+                <p class="text-base font-medium text-sky-100 mb-2">Pembayaran SPP</p>
                 <div class="flex items-center justify-between gap-4">
-                    <!-- Donut Chart -->
                     <div class="relative w-32 h-32 flex-shrink-0">
-                        <svg class="w-full h-full transform -rotate-90">
-                            <circle class="text-red-700" stroke-width="12" stroke="currentColor" fill="transparent" r="50" cx="50%" cy="50%"/>
-                            <circle id="paymentCircle" class="text-red-400" stroke-width="12" stroke-linecap="round" stroke="currentColor" fill="transparent" r="50" cx="50%" cy="50%" style="stroke-dasharray: 314; stroke-dashoffset: 314; transition: stroke-dashoffset 1s ease-out;"/>
-                        </svg>
-                        <div class="absolute inset-0 flex items-center justify-center">
-                            <span id="paidPercentageText" class="text-3xl font-bold text-white">...</span>
-                        </div>
+                        <svg class="w-full h-full transform -rotate-90"><circle class="text-sky-600" stroke-width="12" stroke="currentColor" fill="transparent" r="50" cx="50%" cy="50%"/><circle id="paymentCircle" class="text-white" stroke-width="12" stroke-linecap="round" stroke="currentColor" fill="transparent" r="50" cx="50%" cy="50%" style="stroke-dasharray: 314; stroke-dashoffset: 314; transition: stroke-dashoffset 1s ease-out;"/></svg>
+                        <div class="absolute inset-0 flex items-center justify-center"><span id="paidPercentageText" class="text-3xl font-bold text-white">...</span></div>
                     </div>
-                    <!-- Stats Text -->
                     <div class="flex-grow">
                         <p class="text-4xl font-bold text-white" id="paidStudents"><span class="skeleton-card w-20 h-10 inline-block"></span></p>
-                        <p class="text-sm text-red-200" id="totalStudentsText">dari ... santri</p>
-                        <div class="space-y-1 mt-4 border-t border-red-600 pt-2">
-                            <div class="flex justify-between text-sm"><span class="text-red-100">Lunas</span><span class="font-medium text-green-200" id="paidCount">...</span></div>
-                            <div class="flex justify-between text-sm"><span class="text-red-100">Belum Bayar</span><span class="font-medium text-rose-200" id="unpaidCount">...</span></div>
+                        <p class="text-sm text-sky-200" id="totalStudentsText">dari ... santri</p>
+                        <div class="space-y-1 mt-4 border-t border-sky-300 pt-2">
+                            <div class="flex justify-between text-sm"><span class="text-white">Lunas</span><span class="font-medium text-yellow-300" id="paidCount">...</span></div>
+                            <div class="flex justify-between text-sm"><span class="text-white">Belum Bayar</span><span class="font-medium text-white" id="unpaidCount">...</span></div>
                         </div>
                     </div>
                 </div>
             </div>
-            <!-- Upcoming Events -->
             <div class="chart-card bg-gradient-to-br from-purple-50 to-violet-100 rounded-xl shadow-lg p-6">
                 <div class="flex items-center justify-between mb-4">
                     <div>
@@ -124,12 +95,10 @@
         <hr class="my-8 border-gray-300">
 
         <h2 class="text-2xl font-bold text-gray-800 mb-6">Monitoring Tugas Tim</h2>
-        <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-6" id="teamGrid">
-            <!-- Skeleton Loader Cards -->
-            <div class="skeleton-card h-[500px]"></div>
-            <div class="skeleton-card h-[500px]"></div>
-            <div class="skeleton-card h-[500px]"></div>
-            <div class="skeleton-card h-[500px]"></div>
+        <div id="teamMonitoringTabs">
+            <!-- Tabs akan di-generate oleh JavaScript -->
+            <div class="skeleton-card w-full h-12 mb-4"></div>
+            <div class="skeleton-card w-full h-[500px]"></div>
         </div>
     </main>
 
@@ -139,9 +108,8 @@
     </div>
 
     <script>
-        // Google Sheets Configuration
         const googleSheetsConfig = {
-            webAppUrl: 'https://script.google.com/macros/s/AKfycbzhufJSLDws8_3PUd5coQDi_pqSBFoQqzVWGE7ePPa-Ry_i5S57AXko0BfDfxOTzYq2Nw/exec',
+            webAppUrl: 'https://script.google.com/macros/s/AKfycbwR82NaJWlBaRC3_92aKX_Dc_4-yFGQE653-AHy4FBIkeyinvKsht5EGxagJWZA-rUMlA/exec',
         };
 
         function showNotification(message, type = 'success') {
@@ -174,19 +142,18 @@
                 statusText.textContent = 'Terhubung';
                 
                 renderSummaryCards(data.summary);
-                renderTeamCards(data.teams);
+                renderTeamTabs(data.teams, data.teamOrder); // Menggunakan urutan dari skrip
                 if(forceRefresh) showNotification('Data berhasil dimuat ulang!', 'success');
 
             } catch (error) {
                 console.error("Error fetching data:", error);
                 statusIndicator.className = 'w-3 h-3 bg-red-500 rounded-full';
                 statusText.textContent = 'Gagal Terhubung';
-                document.getElementById('teamGrid').innerHTML = `<p class="text-red-600 col-span-full">Gagal memuat data tim. Pastikan URL Apps Script benar dan sudah di-deploy ulang.</p>`;
+                document.getElementById('teamMonitoringTabs').innerHTML = `<p class="text-red-600 col-span-full">Gagal memuat data tim. Pastikan URL Apps Script benar dan sudah di-deploy ulang.</p>`;
             }
         }
 
         function renderSummaryCards(summary) {
-            // Update Program List Card
             document.getElementById('approvedPrograms').textContent = summary.approvedPrograms;
             const programListContainer = document.getElementById('programListContainer');
             programListContainer.innerHTML = '';
@@ -194,30 +161,19 @@
                  summary.programList.forEach(prog => {
                     const progDiv = document.createElement('div');
                     progDiv.className = 'text-xs border-b border-blue-600 pb-2 mb-2';
-                    progDiv.innerHTML = `
-                        <div class="flex justify-between items-center">
-                            <p class="font-bold text-white text-sm">${prog.nama}</p>
-                            <span class="font-medium text-blue-100 bg-blue-500 px-2 py-0.5 rounded-full">${prog.status}</span>
-                        </div>
-                        <div class="flex justify-between text-blue-300 mt-1">
-                            <span>${prog.kategori}</span>
-                            <span>Oleh: ${prog.tim}</span>
-                        </div>
-                    `;
+                    progDiv.innerHTML = `<div class="flex justify-between items-center"><p class="font-bold text-white text-sm">${prog.nama}</p><span class="font-medium text-blue-100 bg-blue-500 px-2 py-0.5 rounded-full">${prog.status}</span></div><div class="flex justify-between text-blue-300 mt-1"><span>${prog.kategori}</span><span>Oleh: ${prog.tim}</span></div>`;
                     programListContainer.appendChild(progDiv);
                 });
             } else {
                 programListContainer.innerHTML = `<p class="text-xs text-blue-300 italic">Belum ada program yang disetujui.</p>`;
             }
 
-            // Update SPP Card
             document.getElementById('paidStudents').textContent = summary.paidStudents;
             document.getElementById('totalStudentsText').innerHTML = `dari ${summary.totalStudents} santri`;
             document.getElementById('paidPercentageText').textContent = `${summary.paidPercentage}%`;
             document.getElementById('paidCount').textContent = summary.paidStudents;
             document.getElementById('unpaidCount').textContent = summary.unpaidCount;
             
-            // Update Events Card
             const eventListContainer = document.getElementById('eventListContainer');
             eventListContainer.innerHTML = '';
             document.getElementById('upcomingEvents').textContent = summary.upcomingEvents;
@@ -234,19 +190,37 @@
             animateChart('paymentChart', summary);
         }
 
-        function renderTeamCards(teams) {
-            const teamGrid = document.getElementById('teamGrid');
-            teamGrid.innerHTML = '';
+        function renderTeamTabs(teams, teamOrder) {
+            const container = document.getElementById('teamMonitoringTabs');
+            container.innerHTML = '';
 
-            if (Object.keys(teams).length === 0) {
-                teamGrid.innerHTML = `<p class="text-gray-600 col-span-full">Belum ada data tim di spreadsheet 'Tugas_Tim'.</p>`;
+            const teamNamesToRender = teamOrder || Object.keys(teams);
+
+            if (teamNamesToRender.length === 0) {
+                container.innerHTML = `<p class="text-gray-600">Belum ada data tim di spreadsheet 'Tugas_Tim'.</p>`;
                 return;
             }
 
-            for (const teamName in teams) {
+            const tabNav = document.createElement('div');
+            tabNav.className = 'flex border-b border-gray-300 overflow-x-auto whitespace-nowrap mb-4';
+            
+            const tabContentContainer = document.createElement('div');
+            
+            let isFirstTab = true;
+            for (const teamName of teamNamesToRender) {
+                if (!teams[teamName]) continue;
                 const team = teams[teamName];
-                const card = document.createElement('div');
-                card.className = 'bg-white rounded-lg shadow-md flex flex-col';
+                const teamId = teamName.replace(/\s+/g, '-');
+
+                const tabButton = document.createElement('button');
+                tabButton.textContent = teamName;
+                tabButton.className = `py-2 px-4 text-sm font-medium border-b-2 transition-colors duration-300 ${isFirstTab ? 'tab-active' : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'}`;
+                tabButton.dataset.target = `tab-${teamId}`;
+                tabNav.appendChild(tabButton);
+
+                const tabContent = document.createElement('div');
+                tabContent.id = `tab-${teamId}`;
+                tabContent.className = `tab-content bg-white rounded-lg shadow-md ${isFirstTab ? '' : 'hidden'}`;
                 
                 const renderList = (title, items, type, color) => {
                     let listHtml = `<div class="p-4"><h4 class="font-semibold text-sm ${color} mb-2">${title} (${items.length})</h4><ul class="space-y-1.5 text-sm max-h-32 overflow-y-auto pr-2 task-list">`;
@@ -280,26 +254,38 @@
                     return komentarHtml;
                 };
 
-                card.innerHTML = `
-                    <div class="p-4 border-b"><h3 class="font-bold text-lg text-gray-800">${teamName}</h3></div>
-                    ${renderList('To Do List', team.todo, 'todo', 'text-gray-700')}
-                    ${renderList('In Progress', team.inProgress, 'inProgress', 'text-yellow-600')}
+                tabContent.innerHTML = `
+                    ${renderList('Tugas Hari Ini', team.todo, 'todo', 'text-gray-700')}
+                    ${renderList('Masih Proses Penyelesaian', team.inProgress, 'inProgress', 'text-yellow-600')}
                     ${renderList('Tugas Selesai', team.selesai, 'selesai', 'text-green-600')}
                     ${renderKomentar(team.komentar)}
                     <div class="border-t p-4 mt-auto bg-gray-50 rounded-b-lg">
                         <div class="flex gap-2">
-                            <input type="text" id="comment-input-${teamName.replace(/\s+/g, '-')}" class="flex-grow border border-gray-300 rounded-md px-2 py-1 text-sm focus:ring-2 focus:ring-blue-500 focus:border-transparent" placeholder="Tulis komentar...">
+                            <input type="text" id="comment-input-${teamId}" class="flex-grow border border-gray-300 rounded-md px-2 py-1 text-sm focus:ring-2 focus:ring-blue-500 focus:border-transparent" placeholder="Tulis komentar...">
                             <button onclick="postComment('${teamName}')" class="bg-blue-600 text-white px-3 py-1 rounded-md text-sm font-semibold hover:bg-blue-700 transition-colors">Kirim</button>
                         </div>
                     </div>
                 `;
-                teamGrid.appendChild(card);
+                tabContentContainer.appendChild(tabContent);
+                isFirstTab = false;
             }
+
+            container.appendChild(tabNav);
+            container.appendChild(tabContentContainer);
+
+            tabNav.addEventListener('click', (e) => {
+                if (e.target.tagName === 'BUTTON') {
+                    tabNav.querySelectorAll('button').forEach(btn => btn.className = 'py-2 px-4 text-sm font-medium border-b-2 border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300');
+                    tabContentContainer.querySelectorAll('.tab-content').forEach(content => content.classList.add('hidden'));
+                    e.target.className = 'py-2 px-4 text-sm font-medium border-b-2 transition-colors duration-300 tab-active';
+                    document.getElementById(e.target.dataset.target).classList.remove('hidden');
+                }
+            });
         }
 
         async function postComment(teamName) {
-            const inputId = `comment-input-${teamName.replace(/\s+/g, '-')}`;
-            const inputElement = document.getElementById(inputId);
+            const teamId = teamName.replace(/\s+/g, '-');
+            const inputElement = document.getElementById(`comment-input-${teamId}`);
             const commentText = inputElement.value.trim();
             if (!commentText) return showNotification('Komentar tidak boleh kosong', 'error');
 
