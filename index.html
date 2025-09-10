@@ -31,7 +31,7 @@
                 <div class="flex items-center gap-3 sm:gap-4">
                     <img src="https://iili.io/FsLlXA7.png" alt="Logo Malika Boarding School" class="h-10 sm:h-12 w-auto">
                     <div>
-                        <h1 class="text-lg sm:text-2xl lg:text-3xl font-extrabold text-blue-600">MALIKA BOARDING SCHOOL</h1>
+                        <h1 class="text-lg sm:text-2xl lg:text-3xl font-extrabold text-[#020c91]">MALIKA BOARDING SCHOOL</h1>
                         <p class="text-xs sm:text-base text-gray-500 mt-1">Dashboard Monitoring Tim</p>
                     </div>
                 </div>
@@ -256,7 +256,7 @@
                  </div>`;
             };
 
-            contentArea.innerHTML = `
+            const contentHtml = `
                 <div class="bg-white p-6 rounded-xl border border-gray-200 shadow-sm">
                     <h3 class="font-bold text-2xl text-blue-600 mb-6">${teamName}</h3>
                     <div class="space-y-6">
@@ -286,6 +286,7 @@
                     </div>
                 </div>
             `;
+            contentArea.innerHTML = contentHtml;
         }
 
         function renderTeamMonitoring(teams, teamOrder) {
@@ -296,38 +297,41 @@
             }
 
             container.innerHTML = `
-                <!-- Dropdown untuk Mobile -->
-                <div class="w-full md:hidden mb-4">
-                    <select onchange="displayTeamContent(this.value)" class="w-full p-3 border-gray-300 rounded-xl shadow-sm text-lg font-semibold text-gray-700">
-                        ${teamOrder.map(teamName => `<option value="${teamName}">${teamName}</option>`).join('')}
-                    </select>
-                </div>
+                <div class="md:flex md:flex-row md:gap-8 md:items-start">
+                    <!-- Kolom Navigasi (Sidebar/Dropdown) -->
+                    <div class="w-full md:w-1/4 lg:w-1/5">
+                        <!-- Dropdown untuk Mobile -->
+                        <div class="md:hidden mb-4">
+                            <select onchange="displayTeamContent(this.value)" class="w-full p-3 border-gray-300 rounded-xl shadow-sm text-lg font-semibold text-gray-700">
+                                ${teamOrder.map(teamName => `<option value="${teamName}">${teamName}</option>`).join('')}
+                            </select>
+                        </div>
 
-                <!-- Layout Sidebar + Konten untuk Desktop -->
-                <div class="hidden md:flex flex-row gap-6 lg:gap-8 items-start">
-                    <!-- Sidebar -->
-                    <div class="w-full md:w-1/4 lg:w-1/5 bg-white p-4 rounded-xl border border-gray-200 shadow-sm self-start h-auto md:max-h-[600px] overflow-y-auto sidebar">
-                        <ul class="space-y-1">
-                            ${teamOrder.map(teamName => `
-                                <li class="sidebar-item p-2 rounded-md cursor-pointer hover:bg-blue-50 text-gray-600" data-team="${teamName}" onclick="displayTeamContent('${teamName}')">
-                                    ${teamName}
-                                </li>
-                            `).join('')}
-                        </ul>
+                        <!-- Sidebar untuk Desktop -->
+                        <div class="hidden md:block bg-white p-4 rounded-xl border border-gray-200 shadow-sm self-start h-auto md:max-h-[600px] overflow-y-auto sidebar">
+                            <ul class="space-y-1">
+                                ${teamOrder.map(teamName => `
+                                    <li class="sidebar-item p-2 rounded-md cursor-pointer hover:bg-blue-50 text-gray-600" data-team="${teamName}" onclick="displayTeamContent('${teamName}')">
+                                        ${teamName}
+                                    </li>
+                                `).join('')}
+                            </ul>
+                        </div>
                     </div>
-                    <!-- Area Konten (hanya untuk Desktop) -->
-                    <div class="w-full md:w-3/4 lg:w-4/5" id="teamContent"></div>
+
+                    <!-- Kolom Konten (Satu untuk semua perangkat) -->
+                    <div class="w-full md:w-3/4 lg:w-4/5 mt-4 md:mt-0" id="teamContent">
+                         <!-- Konten akan dimuat di sini oleh displayTeamContent -->
+                    </div>
                 </div>
-
-                <!-- Area Konten (hanya untuk Mobile, di bawah dropdown) -->
-                <div class="w-full md:hidden mt-4" id="teamContentMobile"></div>
             `;
-
+            
             if (teamOrder.length > 0) {
-                displayTeamContent(teamOrder[0]); // Tampilkan konten awal
+                setTimeout(() => {
+                    displayTeamContent(teamOrder[0]);
+                }, 0);
             }
         }
-
 
         async function postComment(teamName) {
             const textareaId = `comment-${teamName.replace(/\s+/g, '-')}`;
