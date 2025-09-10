@@ -56,7 +56,6 @@
     <main class="max-w-screen-2xl mx-auto px-4 sm:px-6 py-6 sm:py-8 relative z-10">
         <!-- KARTU STATISTIK -->
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-8">
-            <!-- KARTU FEEDBACK YANG DIPERBARUI -->
             <div class="chart-card bg-gradient-to-br from-sky-500 to-indigo-600 rounded-2xl shadow-lg p-6 relative overflow-hidden">
                 <div class="absolute -top-4 -right-4 w-24 h-24 bg-white/10 rounded-full"></div>
                 <div class="relative z-10">
@@ -110,11 +109,8 @@
 
         <h2 class="text-2xl font-bold text-gray-800 mb-6">Monitoring Tim</h2>
         <div id="teamMonitoring">
-            <div class="w-full md:hidden mb-4"><div class="skeleton-card w-full h-12"></div></div>
-            <div class="hidden md:flex gap-8 items-start">
-                 <div class="w-full md:w-1/4"><div class="skeleton-card w-full h-96"></div></div>
-                 <div class="w-full md:w-3/4"><div class="skeleton-card w-full h-96"></div></div>
-            </div>
+            <!-- Skeleton Loader -->
+             <div class="skeleton-card w-full h-96"></div>
         </div>
     </main>
 
@@ -299,51 +295,39 @@
                 return;
             }
 
-            const mobileDropdownContainer = document.createElement('div');
-            mobileDropdownContainer.className = 'w-full md:hidden mb-4';
-            const select = document.createElement('select');
-            select.className = 'w-full p-3 border-gray-300 rounded-xl shadow-sm text-lg font-semibold text-gray-700';
-            select.onchange = (event) => displayTeamContent(event.target.value);
-            teamOrder.forEach(teamName => {
-                const option = document.createElement('option');
-                option.value = teamName;
-                option.textContent = teamName;
-                select.appendChild(option);
-            });
-            mobileDropdownContainer.appendChild(select);
+            container.innerHTML = `
+                <!-- Dropdown untuk Mobile -->
+                <div class="w-full md:hidden mb-4">
+                    <select onchange="displayTeamContent(this.value)" class="w-full p-3 border-gray-300 rounded-xl shadow-sm text-lg font-semibold text-gray-700">
+                        ${teamOrder.map(teamName => `<option value="${teamName}">${teamName}</option>`).join('')}
+                    </select>
+                </div>
 
-            const desktopLayout = document.createElement('div');
-            desktopLayout.className = 'hidden md:flex flex-row gap-6 lg:gap-8 items-start';
+                <!-- Layout Sidebar + Konten untuk Desktop -->
+                <div class="hidden md:flex flex-row gap-6 lg:gap-8 items-start">
+                    <!-- Sidebar -->
+                    <div class="w-full md:w-1/4 lg:w-1/5 bg-white p-4 rounded-xl border border-gray-200 shadow-sm self-start h-auto md:max-h-[600px] overflow-y-auto sidebar">
+                        <ul class="space-y-1">
+                            ${teamOrder.map(teamName => `
+                                <li class="sidebar-item p-2 rounded-md cursor-pointer hover:bg-blue-50 text-gray-600" data-team="${teamName}" onclick="displayTeamContent('${teamName}')">
+                                    ${teamName}
+                                </li>
+                            `).join('')}
+                        </ul>
+                    </div>
+                    <!-- Area Konten (hanya untuk Desktop) -->
+                    <div class="w-full md:w-3/4 lg:w-4/5" id="teamContent"></div>
+                </div>
 
-            const sidebar = document.createElement('div');
-            sidebar.className = 'w-full md:w-1/4 lg:w-1/5 bg-white p-4 rounded-xl border border-gray-200 shadow-sm self-start h-auto md:max-h-[600px] overflow-y-auto sidebar';
-            const teamList = document.createElement('ul');
-            teamList.className = 'space-y-1';
-            teamOrder.forEach(teamName => {
-                const li = document.createElement('li');
-                li.className = 'sidebar-item p-2 rounded-md cursor-pointer hover:bg-blue-50 text-gray-600';
-                li.textContent = teamName;
-                li.dataset.team = teamName;
-                li.onclick = () => displayTeamContent(teamName);
-                teamList.appendChild(li);
-            });
-            sidebar.appendChild(teamList);
-
-            const contentArea = document.createElement('div');
-            contentArea.className = 'w-full md:w-3/4 lg:w-4/5';
-            contentArea.id = 'teamContent';
-
-            desktopLayout.appendChild(sidebar);
-            desktopLayout.appendChild(contentArea);
-            
-            container.innerHTML = '';
-            container.appendChild(mobileDropdownContainer);
-            container.appendChild(desktopLayout);
+                <!-- Area Konten (hanya untuk Mobile, di bawah dropdown) -->
+                <div class="w-full md:hidden mt-4" id="teamContentMobile"></div>
+            `;
 
             if (teamOrder.length > 0) {
-                displayTeamContent(teamOrder[0]);
+                displayTeamContent(teamOrder[0]); // Tampilkan konten awal
             }
         }
+
 
         async function postComment(teamName) {
             const textareaId = `comment-${teamName.replace(/\s+/g, '-')}`;
