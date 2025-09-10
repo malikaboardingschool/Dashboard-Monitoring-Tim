@@ -24,8 +24,8 @@
     <div class="absolute top-0 right-0 -mr-48 -mt-48 w-96 h-96 bg-blue-300 rounded-full opacity-20 mix-blend-multiply filter blur-3xl animate-pulse"></div>
     <div class="absolute bottom-0 left-0 -ml-48 -mb-48 w-80 h-80 bg-purple-300 rounded-full opacity-20 mix-blend-multiply filter blur-3xl animate-pulse animation-delay-4000"></div>
 
-    <!-- KONTEN APLIKASI UTAMA (SEMBUNYI SECARA DEFAULT) -->
-    <div id="appContainer" class="hidden">
+    <!-- KONTEN APLIKASI UTAMA -->
+    <div id="appContainer">
         <!-- Header -->
         <header class="bg-white/80 backdrop-blur-lg sticky top-0 z-20 border-b border-gray-200">
             <div class="max-w-screen-2xl mx-auto px-4 sm:px-6 py-4">
@@ -58,7 +58,7 @@
         <main class="max-w-screen-2xl mx-auto px-4 sm:px-6 py-6 sm:py-8 relative z-10">
             <!-- KARTU STATISTIK (URUTAN BARU) -->
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-8">
-                <!-- 1. Event Bulan Ini (WARNA BARU) -->
+                <!-- 1. Event Bulan Ini -->
                 <div class="chart-card bg-gradient-to-br from-sky-500 to-indigo-600 rounded-2xl shadow-lg p-6 relative overflow-hidden">
                     <div class="absolute -top-4 -right-4 w-24 h-24 bg-white/10 rounded-full"></div>
                     <div class="flex items-center justify-between mb-4">
@@ -90,7 +90,7 @@
                     </div>
                 </div>
 
-                <!-- 3. Feedback & Masukan (WARNA BARU) -->
+                <!-- 3. Feedback & Masukan -->
                 <div class="chart-card bg-gradient-to-br from-purple-500 to-pink-500 rounded-2xl shadow-lg p-6 relative overflow-hidden">
                     <div class="absolute -top-4 -right-4 w-24 h-24 bg-white/10 rounded-full"></div>
                     <div class="relative z-10">
@@ -120,61 +120,16 @@
         </main>
     </div>
 
-    <!-- LAYAR PASSWORD BARU -->
-    <div id="passwordModal" class="fixed inset-0 bg-slate-100 z-50 flex items-center justify-center p-4">
-        <div class="w-full max-w-md">
-            <div class="bg-white p-8 rounded-2xl shadow-xl text-center">
-                <img src="https://iili.io/FsLlXA7.png" alt="Logo Malika Boarding School" class="h-16 w-auto mx-auto mb-4">
-                <h2 class="text-2xl font-bold text-gray-800">Akses Terbatas</h2>
-                <p class="text-gray-500 mt-2 mb-6">Silakan masukkan kata sandi untuk melanjutkan.</p>
-                <form id="passwordForm">
-                    <input type="password" id="passwordInput" class="w-full px-4 py-3 border border-gray-300 rounded-lg text-center text-lg tracking-widest" placeholder="••••••••">
-                    <p id="passwordError" class="text-red-500 text-sm mt-2 h-5"></p>
-                    <button type="submit" class="w-full bg-[#020c91] text-white py-3 rounded-lg font-semibold mt-4 hover:bg-opacity-90 transition-colors">Masuk</button>
-                </form>
-            </div>
-        </div>
-    </div>
-
-
     <!-- Notification -->
     <div id="notification" class="fixed top-20 right-4 w-auto bg-green-500 text-white px-6 py-3 rounded-lg shadow-lg hidden notification z-50">
         <span id="notificationText"></span>
     </div>
 
     <script>
-        // --- KONFIGURASI & LOGIKA PASSWORD BARU ---
-        const CORRECT_PASSWORD = '99'; // Anda bisa mengubah password di sini
-
         document.addEventListener('DOMContentLoaded', () => {
-            const passwordForm = document.getElementById('passwordForm');
-            const passwordInput = document.getElementById('passwordInput');
-            const passwordError = document.getElementById('passwordError');
-            const appContainer = document.getElementById('appContainer');
-            const passwordModal = document.getElementById('passwordModal');
-
-            if (sessionStorage.getItem('isAuthenticated') === 'true') {
-                showApp();
-            }
-
-            passwordForm.addEventListener('submit', (e) => {
-                e.preventDefault();
-                if (passwordInput.value === CORRECT_PASSWORD) {
-                    sessionStorage.setItem('isAuthenticated', 'true');
-                    showApp();
-                } else {
-                    passwordError.textContent = 'Kata sandi salah. Silakan coba lagi.';
-                    passwordInput.classList.add('border-red-500');
-                    passwordInput.value = '';
-                }
-            });
-
-            function showApp() {
-                passwordModal.classList.add('hidden');
-                appContainer.classList.remove('hidden');
-                displayCurrentDates(); 
-                fetchDashboardData();
-            }
+            // Langsung tampilkan aplikasi tanpa cek password
+            displayCurrentDates(); 
+            fetchDashboardData();
         });
 
         const googleSheetsConfig = {
@@ -224,13 +179,13 @@
             } else {
                 summary.feedbackList.forEach(fb => {
                     const div = document.createElement('div');
-                    div.className = 'bg-purple-500/50 p-3 rounded-lg';
+                    div.className = 'bg-white/20 backdrop-blur-md p-3 rounded-lg border border-white/30';
                     div.innerHTML = `
                         <div class="flex justify-between items-start">
                             <p class="text-sm text-white flex-1 pr-4">${fb.isi}</p>
                             <span class="text-xs font-medium text-yellow-800 bg-yellow-300 px-2 py-1 rounded-full whitespace-nowrap">${fb.status}</span>
                         </div>
-                        <p class="text-xs text-purple-200 mt-2 text-right">Oleh: ${fb.penerima}</p>
+                        <p class="text-xs text-purple-100 mt-2 text-right">Oleh: ${fb.penerima}</p>
                     `;
                     feedbackContainer.appendChild(div);
                 });
