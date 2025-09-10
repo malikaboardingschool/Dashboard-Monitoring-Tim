@@ -14,32 +14,39 @@
         @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.7; } }
         .chart-card { transition: all 0.3s ease-in-out; }
         .chart-card:hover { transform: translateY(-10px); box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.15); }
+        .sidebar-item.active { background-color: #eff6ff; color: #2563eb; font-weight: 600; }
+        .sidebar::-webkit-scrollbar { width: 4px; }
+        .sidebar::-webkit-scrollbar-thumb { background: #d1d5db; border-radius: 10px; }
     </style>
 </head>
 <body class="bg-slate-50 relative overflow-x-hidden">
     <!-- Decorative Blobs -->
     <div class="absolute top-0 right-0 -mr-48 -mt-48 w-96 h-96 bg-blue-300 rounded-full opacity-20 mix-blend-multiply filter blur-3xl animate-pulse"></div>
-    <div class="absolute bottom-0 left-0 -ml-48 -mb-48 w-80 h-80 bg-yellow-300 rounded-full opacity-20 mix-blend-multiply filter blur-3xl animate-pulse animation-delay-4000"></div>
+    <div class="absolute bottom-0 left-0 -ml-48 -mb-48 w-80 h-80 bg-purple-300 rounded-full opacity-20 mix-blend-multiply filter blur-3xl animate-pulse animation-delay-4000"></div>
 
     <!-- Header -->
     <header class="bg-white/80 backdrop-blur-lg sticky top-0 z-20 border-b border-gray-200">
         <div class="max-w-screen-2xl mx-auto px-4 sm:px-6 py-4">
-            <div class="flex flex-col sm:flex-row justify-between items-center gap-4">
-                <div class="flex-1">
-                    <h1 class="text-xl sm:text-2xl lg:text-3xl font-extrabold text-blue-600">MALIKA BOARDING SCHOOL</h1>
-                    <p class="text-sm sm:text-base text-gray-500 mt-1">Dashboard Monitoring Tim</p>
+            <div class="flex flex-wrap justify-between items-center gap-4">
+                <div class="flex items-center gap-3 sm:gap-4">
+                    <img src="https://iili.io/FsLlXA7.png" alt="Logo Malika Boarding School" class="h-10 sm:h-12 w-auto">
+                    <div>
+                        <h1 class="text-lg sm:text-2xl lg:text-3xl font-extrabold text-blue-600">MALIKA BOARDING SCHOOL</h1>
+                        <p class="text-xs sm:text-base text-gray-500 mt-1">Dashboard Monitoring Tim</p>
+                    </div>
                 </div>
-                <!-- FITUR TANGGAL BARU -->
-                <div class="text-right hidden sm:block">
-                    <p id="gregorianDate" class="font-semibold text-gray-700">Memuat tanggal...</p>
-                    <p id="hijriDate" class="text-sm text-gray-500" dir="rtl"></p>
-                </div>
-                 <div class="flex items-center gap-3">
-                    <div id="sheetsStatus" class="w-3 h-3 bg-yellow-500 rounded-full animate-pulse"></div>
-                    <span class="text-xs sm:text-sm text-gray-600" id="sheetsStatusText">Menghubungkan...</span>
-                    <button onclick="fetchDashboardData(true)" class="bg-blue-50 hover:bg-blue-100 text-blue-600 p-2 rounded-full transition-colors" title="Refresh Data">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M4 2a1 1 0 011 1v2.101a7.002 7.002 0 0111.601 2.566 1 1 0 11-1.885.666A5.002 5.002 0 005.999 7H9a1 1 0 110 2H4a1 1 0 01-1-1V3a1 1 0 011-1zm.008 9.057a1 1 0 011.276.61A5.002 5.002 0 0014.001 13H11a1 1 0 110-2h5a1 1 0 011 1v5a1 1 0 11-2 0v-2.101a7.002 7.002 0 01-11.601-2.566 1 1 0 01.61-1.276z" clip-rule="evenodd" /></svg>
-                    </button>
+                <div class="flex items-center gap-4 sm:gap-6">
+                    <div class="text-right">
+                        <p id="gregorianDate" class="text-xs sm:text-sm font-semibold text-gray-700">Memuat tanggal...</p>
+                        <p id="hijriDate" class="text-xs sm:text-sm text-gray-500" dir="rtl"></p>
+                    </div>
+                     <div class="flex items-center gap-3">
+                        <div id="sheetsStatus" class="w-3 h-3 bg-yellow-500 rounded-full animate-pulse"></div>
+                        <span class="hidden sm:inline text-xs sm:text-sm text-gray-600" id="sheetsStatusText">Menghubungkan...</span>
+                        <button onclick="fetchDashboardData(true)" class="bg-blue-50 hover:bg-blue-100 text-blue-600 p-2 rounded-full transition-colors" title="Refresh Data">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M4 2a1 1 0 011 1v2.101a7.002 7.002 0 0111.601 2.566 1 1 0 11-1.885.666A5.002 5.002 0 005.999 7H9a1 1 0 110 2H4a1 1 0 01-1-1V3a1 1 0 011-1zm.008 9.057a1 1 0 011.276.61A5.002 5.002 0 0014.001 13H11a1 1 0 110-2h5a1 1 0 011 1v5a1 1 0 11-2 0v-2.101a7.002 7.002 0 01-11.601-2.566 1 1 0 01.61-1.276z" clip-rule="evenodd" /></svg>
+                        </button>
+                    </div>
                 </div>
             </div>
         </div>
@@ -49,7 +56,6 @@
     <main class="max-w-screen-2xl mx-auto px-4 sm:px-6 py-6 sm:py-8 relative z-10">
         <!-- KARTU STATISTIK -->
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-8">
-             <!-- Kartu Statistik -->
             <div class="chart-card bg-gradient-to-br from-sky-500 to-indigo-600 rounded-2xl shadow-lg p-6">
                  <div class="flex items-center justify-between mb-4">
                     <div>
@@ -69,7 +75,6 @@
                     <div class="flex-grow">
                         <p class="text-4xl font-bold text-white" id="paidStudents"><span class="skeleton-card bg-slate-600 w-20 h-10 inline-block"></span></p>
                         <p class="text-sm text-slate-400" id="totalStudentsText">dari ... santri</p>
-                        <!-- BAGIAN DETAIL PEMBAYARAN BARU -->
                         <div class="space-y-1 mt-4 border-t border-slate-700 pt-2">
                             <div class="flex justify-between text-sm"><span class="text-slate-400">Lunas Bulan Ini</span><span class="font-medium text-green-400" id="paidCount">...</span></div>
                             <div class="flex justify-between text-sm"><span class="text-slate-400">Belum Lunas Bulan Ini</span><span class="font-medium text-red-400" id="unpaidCount">...</span></div>
@@ -78,23 +83,27 @@
                     </div>
                 </div>
             </div>
-             <div class="chart-card bg-gradient-to-br from-amber-400 to-orange-500 rounded-2xl shadow-lg p-6">
+             <!-- KARTU EVENT BARU -->
+             <div class="chart-card bg-gradient-to-br from-purple-500 to-pink-500 rounded-2xl shadow-lg p-6 relative overflow-hidden">
+                <div class="absolute -top-4 -right-4 w-24 h-24 bg-white/10 rounded-full"></div>
                 <div class="flex items-center justify-between mb-4">
                     <div>
-                        <p class="text-base font-medium text-amber-100">Event Bulan Ini</p>
-                        <p class="text-4xl font-bold text-white" id="upcomingEvents"><span class="skeleton-card bg-amber-300/50 w-12 h-10 inline-block"></span></p>
+                        <p class="text-base font-medium text-purple-100">Event Bulan Ini</p>
+                        <p class="text-4xl font-bold text-white" id="upcomingEvents"><span class="skeleton-card bg-purple-400/50 w-12 h-10 inline-block"></span></p>
                     </div>
                 </div>
-                 <div id="eventListContainer" class="space-y-2"><div class="skeleton-card bg-amber-300/50 w-full h-10"></div></div>
+                 <div id="eventListContainer" class="space-y-3"><div class="skeleton-card bg-purple-400/50 w-full h-12"></div></div>
             </div>
         </div>
         
         <hr class="my-8 border-gray-200">
 
         <h2 class="text-2xl font-bold text-gray-800 mb-6">Monitoring Tim</h2>
-        <div id="teamMonitoring">
-            <!-- Tampilan Monitoring Tim akan di-generate oleh JavaScript -->
-             <div class="skeleton-card w-full h-[300px]"></div>
+        <!-- STRUKTUR BARU DENGAN SIDEBAR -->
+        <div id="teamMonitoring" class="flex flex-col md:flex-row gap-6 lg:gap-8 items-start">
+            <!-- Skeleton Loader -->
+            <div class="w-full md:w-1/4"><div class="skeleton-card w-full h-96"></div></div>
+            <div class="w-full md:w-3/4"><div class="skeleton-card w-full h-96"></div></div>
         </div>
     </main>
 
@@ -107,6 +116,8 @@
         const googleSheetsConfig = {
             webAppUrl: 'https://script.google.com/macros/s/AKfycbw1Za6at-Zvj5IrqUUuCFJUl6OVWvE0-utfWRhdO9AFXCM3yVbicVnorJqQrfnq-TFkMQ/exec',
         };
+        
+        let fullTeamData = {}; // Global variable to store fetched data
 
         function showNotification(message, type = 'success') {
             const notification = document.getElementById('notification');
@@ -122,14 +133,9 @@
                 weekday: 'long', day: 'numeric', month: 'long', year: 'numeric'
             });
             try {
-                const hijriFormatter = new Intl.DateTimeFormat('ar-SA-u-ca-islamic-umalqura', {
-                    day: 'numeric', month: 'long', year: 'numeric'
-                });
+                const hijriFormatter = new Intl.DateTimeFormat('ar-SA-u-ca-islamic-umalqura', { day: 'numeric', month: 'long', year: 'numeric' });
                 document.getElementById('hijriDate').textContent = hijriFormatter.format(today);
-            } catch (e) {
-                console.error("Gagal memuat tanggal Hijriah:", e);
-                document.getElementById('hijriDate').textContent = 'Gagal memuat tanggal Hijriah';
-            }
+            } catch (e) { document.getElementById('hijriDate').textContent = 'Gagal memuat tanggal Hijriah'; }
         }
 
         function renderSummaryCards(summary) {
@@ -147,123 +153,163 @@
                 });
             }
 
-            // --- PEMBARUAN KARTU SPP ---
             document.getElementById('paidStudents').textContent = summary.paidStudents || '0';
             document.getElementById('totalStudentsText').textContent = `dari ${summary.totalStudents || 0} santri`;
             document.getElementById('paidPercentageText').textContent = `${summary.paidPercentage || 0}%`;
             document.getElementById('paidCount').textContent = summary.paidStudents || '0';
             document.getElementById('unpaidCount').textContent = summary.unpaidCount || '0';
-            document.getElementById('arrearsLastMonth').textContent = summary.arrearsLastMonth || '0'; // Data baru
+            document.getElementById('arrearsLastMonth').textContent = summary.arrearsLastMonth || '0'; 
 
             const paymentCircle = document.getElementById('paymentCircle');
             const circumference = 2 * Math.PI * 50;
             const offset = circumference - ((summary.paidPercentage || 0) / 100) * circumference;
             paymentCircle.style.strokeDashoffset = offset;
             
+            // --- PEMBARUAN TAMPILAN EVENT ---
             document.getElementById('upcomingEvents').textContent = summary.upcomingEvents || '0';
             const eventsContainer = document.getElementById('eventListContainer');
             eventsContainer.innerHTML = '';
             if (!summary.eventList || summary.eventList.length === 0) {
-                 eventsContainer.innerHTML = `<p class="text-sm text-amber-100 italic">Tidak ada acara bulan ini.</p>`;
+                 eventsContainer.innerHTML = `<p class="text-sm text-purple-200 italic">Tidak ada acara bulan ini.</p>`;
             } else {
                  summary.eventList.forEach(event => {
+                    const dateParts = event.date.split(' ');
+                    const day = dateParts[0];
+                    const month = dateParts[1];
+
                     const div = document.createElement('div');
-                    div.className = 'text-sm flex justify-between items-center border-b border-amber-300/50 pb-1';
-                    div.innerHTML = `<span class="font-semibold text-white">${event.name}</span><span class="text-amber-100 text-xs">${event.date}</span>`;
+                    div.className = 'flex items-center gap-4';
+                    div.innerHTML = `
+                        <div class="flex-shrink-0 w-12 h-12 bg-white/20 rounded-xl flex flex-col items-center justify-center">
+                            <span class="font-bold text-xl text-white">${day}</span>
+                        </div>
+                        <div>
+                            <p class="font-semibold text-white">${event.name}</p>
+                            <p class="text-xs text-purple-200">${month}</p>
+                        </div>
+                    `;
                     eventsContainer.appendChild(div);
                 });
             }
         }
 
+        function displayTeamContent(teamName) {
+            const contentArea = document.getElementById('teamContent');
+            const team = fullTeamData.teams[teamName];
+
+            document.querySelectorAll('.sidebar-item').forEach(item => {
+                item.classList.remove('active');
+                if (item.dataset.team === teamName) item.classList.add('active');
+            });
+
+            if (!team) {
+                contentArea.innerHTML = `<p>Data untuk tim ${teamName} tidak ditemukan.</p>`;
+                return;
+            }
+
+            const renderList = (items, isCompletedList = false) => {
+                if (!items || items.length === 0) return '<p class="text-sm text-gray-400 italic">Tidak ada</p>';
+                return `<ul class="list-disc list-inside space-y-2">${items.map(item => {
+                    if (isCompletedList && item.link) {
+                        return `<li><a href="${item.link}" target="_blank" class="text-sm text-blue-600 hover:underline">${item.deskripsi} 🔗</a></li>`;
+                    }
+                    return `<li class="text-sm text-gray-600">${isCompletedList ? item.deskripsi : item}</li>`;
+                }).join('')}</ul>`;
+            };
+
+            const renderKomentar = (komentar) => {
+                 if (!komentar || komentar.length === 0) return '<p class="text-sm text-gray-400 italic">Belum ada komentar.</p>';
+                 return `<div class="space-y-2">${komentar.slice(-3).reverse().map(k => `
+                    <div class="text-xs bg-gray-100 p-2 rounded-md">
+                        <p class="text-gray-700">${k.teks}</p>
+                        <p class="text-right text-gray-400 mt-1">${k.dari} - ${k.timestamp}</p>
+                    </div>`).join('')}
+                 </div>`;
+            };
+
+            contentArea.innerHTML = `
+                <div class="bg-white p-6 rounded-xl border border-gray-200 shadow-sm">
+                    <h3 class="font-bold text-2xl text-blue-600 mb-6">${teamName}</h3>
+                    <div class="space-y-6">
+                        <div>
+                            <h4 class="font-semibold text-gray-700 mb-3 text-lg">🎯 Target Minggu Ini</h4>
+                            ${renderList(team.weeklyTargets)}
+                        </div>
+                        <hr>
+                        <div>
+                            <h4 class="font-semibold text-gray-700 mb-3 text-lg">✅ Tugas Hari Ini</h4>
+                            ${renderList(team.dailyTasks)}
+                        </div>
+                        <hr>
+                        <div>
+                            <h4 class="font-semibold text-green-600 mb-3 text-lg">🎉 Tugas Selesai Minggu Ini</h4>
+                            ${renderList(team.completedTasks, true)}
+                        </div>
+                        <hr>
+                        <div>
+                            <h4 class="font-semibold text-gray-700 mb-3 text-lg">💬 Komentar Pimpinan</h4>
+                            ${renderKomentar(team.komentar)}
+                            <div class="mt-4">
+                                <textarea id="comment-${teamName.replace(/\s+/g, '-')}" class="w-full text-sm border-gray-300 rounded-md shadow-sm" rows="2" placeholder="Tulis komentar untuk ${teamName}..."></textarea>
+                                <button onclick="postComment('${teamName}')" class="mt-2 bg-blue-500 text-white px-4 py-2 text-sm font-semibold rounded-md hover:bg-blue-600">Kirim Komentar</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
         function renderTeamMonitoring(teams, teamOrder) {
             const container = document.getElementById('teamMonitoring');
-            if (!teams || Object.keys(teams).length === 0) {
+            if (!teams || teamOrder.length === 0) {
                 container.innerHTML = `<p class="text-gray-500">Belum ada data aktivitas tim untuk hari ini.</p>`;
                 return;
             }
 
-            container.innerHTML = `
-                <div class="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-6">
-                    ${teamOrder.map(teamName => {
-                        const team = teams[teamName];
-                        
-                        const renderList = (items, isCompletedList = false) => {
-                            if (!items || items.length === 0) return '<p class="text-sm text-gray-400 italic">Tidak ada</p>';
-                            return `<ul class="list-disc list-inside space-y-2">${items.map(item => {
-                                if (isCompletedList && item.link) {
-                                    return `<li><a href="${item.link}" target="_blank" class="text-sm text-blue-600 hover:underline">${item.deskripsi} 🔗</a></li>`;
-                                }
-                                return `<li class="text-sm text-gray-600">${isCompletedList ? item.deskripsi : item}</li>`;
-                            }).join('')}</ul>`;
-                        };
+            const sidebar = document.createElement('div');
+            sidebar.className = 'w-full md:w-1/4 lg:w-1/5 bg-white p-4 rounded-xl border border-gray-200 shadow-sm self-start h-auto md:max-h-[600px] overflow-y-auto sidebar';
+            
+            const teamList = document.createElement('ul');
+            teamList.className = 'space-y-1';
+            
+            teamOrder.forEach(teamName => {
+                const li = document.createElement('li');
+                li.className = 'sidebar-item p-2 rounded-md cursor-pointer hover:bg-blue-50 text-gray-600';
+                li.textContent = teamName;
+                li.dataset.team = teamName;
+                li.onclick = () => displayTeamContent(teamName);
+                teamList.appendChild(li);
+            });
+            sidebar.appendChild(teamList);
 
-                        const renderKomentar = (komentar) => {
-                             if (!komentar || komentar.length === 0) return '<p class="text-sm text-gray-400 italic">Belum ada komentar.</p>';
-                             return `<div class="space-y-2">${komentar.slice(-3).reverse().map(k => `
-                                <div class="text-xs bg-gray-100 p-2 rounded-md">
-                                    <p class="text-gray-700">${k.teks}</p>
-                                    <p class="text-right text-gray-400 mt-1">${k.dari} - ${k.timestamp}</p>
-                                </div>`).join('')}
-                             </div>`;
-                        };
+            const contentArea = document.createElement('div');
+            contentArea.className = 'w-full md:w-3/4 lg:w-4/5';
+            contentArea.id = 'teamContent';
 
-                        return `
-                        <div class="bg-white p-6 rounded-xl border border-gray-200 shadow-sm">
-                            <h3 class="font-bold text-lg text-blue-600 mb-4">${teamName}</h3>
-                            <div class="space-y-4">
-                                <div>
-                                    <h4 class="font-semibold text-gray-700 mb-2">🎯 Target Minggu Ini</h4>
-                                    ${renderList(team.weeklyTargets)}
-                                </div>
-                                <hr>
-                                <div>
-                                    <h4 class="font-semibold text-gray-700 mb-2">✅ Tugas Hari Ini</h4>
-                                    ${renderList(team.dailyTasks)}
-                                </div>
-                                <hr>
-                                <div>
-                                    <h4 class="font-semibold text-green-600 mb-2">🎉 Tugas Selesai Minggu Ini</h4>
-                                    ${renderList(team.completedTasks, true)}
-                                </div>
-                                <hr>
-                                <div>
-                                    <h4 class="font-semibold text-gray-700 mb-2">💬 Komentar Pimpinan</h4>
-                                    ${renderKomentar(team.komentar)}
-                                    <div class="mt-3">
-                                        <textarea id="comment-${teamName.replace(/\s+/g, '-')}" class="w-full text-sm border-gray-300 rounded-md shadow-sm" rows="2" placeholder="Tulis komentar..."></textarea>
-                                        <button onclick="postComment('${teamName}')" class="mt-2 bg-blue-500 text-white px-3 py-1 text-xs font-semibold rounded-md hover:bg-blue-600">Kirim</button>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        `;
-                    }).join('')}
-                </div>
-            `;
+            container.innerHTML = '';
+            container.appendChild(sidebar);
+            container.appendChild(contentArea);
+
+            if (teamOrder.length > 0) {
+                displayTeamContent(teamOrder[0]);
+            }
         }
 
         async function postComment(teamName) {
             const textareaId = `comment-${teamName.replace(/\s+/g, '-')}`;
             const textarea = document.getElementById(textareaId);
             const komentar = textarea.value.trim();
-
-            if (!komentar) {
-                showNotification('Komentar tidak boleh kosong', 'error');
-                return;
-            }
+            if (!komentar) { showNotification('Komentar tidak boleh kosong', 'error'); return; }
 
             try {
                 await fetch(googleSheetsConfig.webAppUrl, {
-                    method: 'POST',
-                    mode: 'no-cors',
+                    method: 'POST', mode: 'no-cors',
                     body: JSON.stringify({ action: 'addComment', tim: teamName, komentar: komentar })
                 });
                 showNotification('Komentar berhasil dikirim!', 'success');
                 textarea.value = '';
                 setTimeout(() => fetchDashboardData(true), 2000);
-            } catch (error) {
-                showNotification('Gagal mengirim komentar', 'error');
-            }
+            } catch (error) { showNotification('Gagal mengirim komentar', 'error'); }
         }
         
         async function fetchDashboardData(forceRefresh = false) {
@@ -278,6 +324,9 @@
                  if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
                  const data = await response.json();
                  if (data.error) throw new Error(data.error);
+                 
+                 fullTeamData = data;
+                 
                  statusIndicator.className = 'w-3 h-3 bg-green-500 rounded-full';
                  statusText.textContent = 'Terhubung';
                  renderSummaryCards(data.summary);
@@ -287,7 +336,6 @@
                  console.error("Error fetching data:", error);
                  statusIndicator.className = 'w-3 h-3 bg-red-500 rounded-full';
                  statusText.textContent = 'Gagal Terhubung';
-                 // --- PERBAIKAN PESAN ERROR ---
                  const errorMessage = `
                     <div class="text-red-600 bg-red-50 p-4 rounded-lg col-span-full">
                         <p class="font-bold">Gagal memuat data tim.</p>
