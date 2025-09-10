@@ -10,7 +10,7 @@
         body { font-family: 'Inter', sans-serif; }
         .notification { animation: slideIn 0.3s ease-out; }
         @keyframes slideIn { from { transform: translateY(-100%); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
-        .skeleton-card { background-color: #f1f5f9; border-radius: 0.75rem; animation: pulse 1.5s cubic-bezier(0.4, 0, 0.6, 1) infinite; }
+        .skeleton-card { background-color: #f1f5f9; border-radius: 0.75rem; animation: pulse 1.s cubic-bezier(0.4, 0, 0.6, 1) infinite; }
         @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.7; } }
         .chart-card { transition: all 0.3s ease-in-out; }
         .chart-card:hover { transform: translateY(-10px); box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.15); }
@@ -24,95 +24,118 @@
     <div class="absolute top-0 right-0 -mr-48 -mt-48 w-96 h-96 bg-blue-300 rounded-full opacity-20 mix-blend-multiply filter blur-3xl animate-pulse"></div>
     <div class="absolute bottom-0 left-0 -ml-48 -mb-48 w-80 h-80 bg-purple-300 rounded-full opacity-20 mix-blend-multiply filter blur-3xl animate-pulse animation-delay-4000"></div>
 
-    <!-- Header -->
-    <header class="bg-white/80 backdrop-blur-lg sticky top-0 z-20 border-b border-gray-200">
-        <div class="max-w-screen-2xl mx-auto px-4 sm:px-6 py-4">
-            <div class="flex flex-wrap justify-between items-center gap-4">
-                <div class="flex items-center gap-3 sm:gap-4">
-                    <img src="https://iili.io/FsLlXA7.png" alt="Logo Malika Boarding School" class="h-10 sm:h-12 w-auto">
-                    <div>
-                        <h1 class="text-lg sm:text-2xl lg:text-3xl font-extrabold text-[#020c91]">MALIKA BOARDING SCHOOL</h1>
-                        <p class="text-xs sm:text-base text-gray-500 mt-1">Dashboard Monitoring Tim</p>
+    <!-- KONTEN APLIKASI UTAMA (SEMBUNYI SECARA DEFAULT) -->
+    <div id="appContainer" class="hidden">
+        <!-- Header -->
+        <header class="bg-white/80 backdrop-blur-lg sticky top-0 z-20 border-b border-gray-200">
+            <div class="max-w-screen-2xl mx-auto px-4 sm:px-6 py-4">
+                <div class="flex flex-wrap justify-between items-center gap-4">
+                    <div class="flex items-center gap-3 sm:gap-4">
+                        <img src="https://iili.io/FsLlXA7.png" alt="Logo Malika Boarding School" class="h-10 sm:h-12 w-auto">
+                        <div>
+                            <h1 class="text-lg sm:text-2xl lg:text-3xl font-extrabold text-[#020c91]">MALIKA BOARDING SCHOOL</h1>
+                            <p class="text-xs sm:text-base text-gray-500 mt-1">Dashboard Monitoring Tim</p>
+                        </div>
                     </div>
-                </div>
-                <div class="flex items-center gap-4 sm:gap-6">
-                    <div class="text-right">
-                        <p id="gregorianDate" class="text-xs sm:text-sm font-semibold text-gray-700">Memuat tanggal...</p>
-                        <p id="hijriDate" class="text-xs sm:text-sm text-gray-500" dir="rtl"></p>
-                    </div>
-                     <div class="flex items-center gap-3">
-                        <div id="sheetsStatus" class="w-3 h-3 bg-yellow-500 rounded-full animate-pulse"></div>
-                        <span class="hidden sm:inline text-xs sm:text-sm text-gray-600" id="sheetsStatusText">Menghubungkan...</span>
-                        <button onclick="fetchDashboardData(true)" class="bg-blue-50 hover:bg-blue-100 text-blue-600 p-2 rounded-full transition-colors" title="Refresh Data">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M4 2a1 1 0 011 1v2.101a7.002 7.002 0 0111.601 2.566 1 1 0 11-1.885.666A5.002 5.002 0 005.999 7H9a1 1 0 110 2H4a1 1 0 01-1-1V3a1 1 0 011-1zm.008 9.057a1 1 0 011.276.61A5.002 5.002 0 0014.001 13H11a1 1 0 110-2h5a1 1 0 011 1v5a1 1 0 11-2 0v-2.101a7.002 7.002 0 01-11.601-2.566 1 1 0 01.61-1.276z" clip-rule="evenodd" /></svg>
-                        </button>
+                    <div class="flex items-center gap-4 sm:gap-6">
+                        <div class="text-right">
+                            <p id="gregorianDate" class="text-xs sm:text-sm font-semibold text-gray-700">Memuat tanggal...</p>
+                            <p id="hijriDate" class="text-xs sm:text-sm text-gray-500" dir="rtl"></p>
+                        </div>
+                         <div class="flex items-center gap-3">
+                            <div id="sheetsStatus" class="w-3 h-3 bg-yellow-500 rounded-full animate-pulse"></div>
+                            <span class="hidden sm:inline text-xs sm:text-sm text-gray-600" id="sheetsStatusText">Menghubungkan...</span>
+                            <button onclick="fetchDashboardData(true)" class="bg-blue-50 hover:bg-blue-100 text-blue-600 p-2 rounded-full transition-colors" title="Refresh Data">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M4 2a1 1 0 011 1v2.101a7.002 7.002 0 0111.601 2.566 1 1 0 11-1.885.666A5.002 5.002 0 005.999 7H9a1 1 0 110 2H4a1 1 0 01-1-1V3a1 1 0 011-1zm.008 9.057a1 1 0 011.276.61A5.002 5.002 0 0014.001 13H11a1 1 0 110-2h5a1 1 0 011 1v5a1 1 0 11-2 0v-2.101a7.002 7.002 0 01-11.601-2.566 1 1 0 01.61-1.276z" clip-rule="evenodd" /></svg>
+                            </button>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
-    </header>
+        </header>
 
-    <!-- Main Dashboard -->
-    <main class="max-w-screen-2xl mx-auto px-4 sm:px-6 py-6 sm:py-8 relative z-10">
-        <!-- KARTU STATISTIK -->
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-8">
-            <div class="chart-card bg-gradient-to-br from-sky-500 to-indigo-600 rounded-2xl shadow-lg p-6 relative overflow-hidden">
-                <div class="absolute -top-4 -right-4 w-24 h-24 bg-white/10 rounded-full"></div>
-                <div class="relative z-10">
-                    <div class="flex items-start justify-between mb-4">
+        <!-- Main Dashboard -->
+        <main class="max-w-screen-2xl mx-auto px-4 sm:px-6 py-6 sm:py-8 relative z-10">
+            <!-- KARTU STATISTIK (URUTAN BARU) -->
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-8">
+                <!-- 1. Event Bulan Ini (WARNA BARU) -->
+                <div class="chart-card bg-gradient-to-br from-sky-500 to-indigo-600 rounded-2xl shadow-lg p-6 relative overflow-hidden">
+                    <div class="absolute -top-4 -right-4 w-24 h-24 bg-white/10 rounded-full"></div>
+                    <div class="flex items-center justify-between mb-4">
                         <div>
-                            <p class="text-base font-medium text-sky-100">Feedback & Masukan</p>
-                            <p class="text-5xl font-extrabold text-white mt-2" id="newFeedbackCount"><span class="skeleton-card bg-sky-400/50 w-16 h-12 inline-block"></span></p>
-                        </div>
-                        <div class="bg-white/20 p-3 rounded-xl">
-                             <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
-                            </svg>
+                            <p class="text-base font-medium text-sky-100">Event Bulan Ini</p>
+                            <p class="text-4xl font-bold text-white" id="upcomingEvents"><span class="skeleton-card bg-sky-400/50 w-12 h-10 inline-block"></span></p>
                         </div>
                     </div>
-                    <p class="text-sm text-sky-200 mb-4">Pesan baru yang perlu ditanggapi.</p>
-                    <div id="feedbackListContainer" class="space-y-2"><div class="skeleton-card bg-sky-400/50 w-full h-10"></div></div>
+                     <div id="eventListContainer" class="space-y-3"><div class="skeleton-card bg-sky-400/50 w-full h-12"></div></div>
+                </div>
+
+                <!-- 2. Pembayaran SPP -->
+                <div class="chart-card bg-slate-800 rounded-2xl shadow-lg p-6">
+                    <p class="text-base font-medium text-slate-300 mb-2">Pembayaran SPP</p>
+                     <div class="flex items-center justify-between gap-4">
+                        <div class="relative w-32 h-32 flex-shrink-0">
+                            <svg class="w-full h-full transform -rotate-90"><circle class="text-slate-600" stroke-width="12" stroke="currentColor" fill="transparent" r="50" cx="50%" cy="50%"/><circle id="paymentCircle" class="text-cyan-400" stroke-width="12" stroke-linecap="round" stroke="currentColor" fill="transparent" r="50" cx="50%" cy="50%" style="stroke-dasharray: 314; stroke-dashoffset: 314; transition: stroke-dashoffset 1s ease-out;"/></svg>
+                            <div class="absolute inset-0 flex items-center justify-center"><span id="paidPercentageText" class="text-3xl font-bold text-white">...</span></div>
+                        </div>
+                        <div class="flex-grow">
+                            <p class="text-4xl font-bold text-white" id="paidStudents"><span class="skeleton-card bg-slate-600 w-20 h-10 inline-block"></span></p>
+                            <p class="text-sm text-slate-400" id="totalStudentsText">dari ... santri</p>
+                            <div class="space-y-1 mt-4 border-t border-slate-700 pt-2">
+                                <div class="flex justify-between text-sm"><span class="text-slate-400">Lunas Bulan Ini</span><span class="font-medium text-green-400" id="paidCount">...</span></div>
+                                <div class="flex justify-between text-sm"><span class="text-slate-400">Belum Lunas Bulan Ini</span><span class="font-medium text-red-400" id="unpaidCount">...</span></div>
+                                <div class="flex justify-between text-sm mt-2 pt-2 border-t border-slate-700"><span class="text-slate-400">Tunggakan Bulan Lalu</span><span class="font-medium text-yellow-400" id="arrearsLastMonth">...</span></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 3. Feedback & Masukan (WARNA BARU) -->
+                <div class="chart-card bg-gradient-to-br from-purple-500 to-pink-500 rounded-2xl shadow-lg p-6 relative overflow-hidden">
+                    <div class="absolute -top-4 -right-4 w-24 h-24 bg-white/10 rounded-full"></div>
+                    <div class="relative z-10">
+                        <div class="flex items-start justify-between mb-4">
+                            <div>
+                                <p class="text-base font-medium text-purple-100">Feedback & Masukan</p>
+                                <p class="text-5xl font-extrabold text-white mt-2" id="newFeedbackCount"><span class="skeleton-card bg-purple-400/50 w-16 h-12 inline-block"></span></p>
+                            </div>
+                            <div class="bg-white/20 p-3 rounded-xl">
+                                 <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
+                                </svg>
+                            </div>
+                        </div>
+                        <p class="text-sm text-purple-200 mb-4">Pesan baru yang perlu ditanggapi.</p>
+                        <div id="feedbackListContainer" class="space-y-2"><div class="skeleton-card bg-purple-400/50 w-full h-10"></div></div>
+                    </div>
                 </div>
             </div>
             
-            <div class="chart-card bg-slate-800 rounded-2xl shadow-lg p-6">
-                <p class="text-base font-medium text-slate-300 mb-2">Pembayaran SPP</p>
-                 <div class="flex items-center justify-between gap-4">
-                    <div class="relative w-32 h-32 flex-shrink-0">
-                        <svg class="w-full h-full transform -rotate-90"><circle class="text-slate-600" stroke-width="12" stroke="currentColor" fill="transparent" r="50" cx="50%" cy="50%"/><circle id="paymentCircle" class="text-cyan-400" stroke-width="12" stroke-linecap="round" stroke="currentColor" fill="transparent" r="50" cx="50%" cy="50%" style="stroke-dasharray: 314; stroke-dashoffset: 314; transition: stroke-dashoffset 1s ease-out;"/></svg>
-                        <div class="absolute inset-0 flex items-center justify-center"><span id="paidPercentageText" class="text-3xl font-bold text-white">...</span></div>
-                    </div>
-                    <div class="flex-grow">
-                        <p class="text-4xl font-bold text-white" id="paidStudents"><span class="skeleton-card bg-slate-600 w-20 h-10 inline-block"></span></p>
-                        <p class="text-sm text-slate-400" id="totalStudentsText">dari ... santri</p>
-                        <div class="space-y-1 mt-4 border-t border-slate-700 pt-2">
-                            <div class="flex justify-between text-sm"><span class="text-slate-400">Lunas Bulan Ini</span><span class="font-medium text-green-400" id="paidCount">...</span></div>
-                            <div class="flex justify-between text-sm"><span class="text-slate-400">Belum Lunas Bulan Ini</span><span class="font-medium text-red-400" id="unpaidCount">...</span></div>
-                            <div class="flex justify-between text-sm mt-2 pt-2 border-t border-slate-700"><span class="text-slate-400">Tunggakan Bulan Lalu</span><span class="font-medium text-yellow-400" id="arrearsLastMonth">...</span></div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-             <div class="chart-card bg-gradient-to-br from-purple-500 to-pink-500 rounded-2xl shadow-lg p-6 relative overflow-hidden">
-                <div class="absolute -top-4 -right-4 w-24 h-24 bg-white/10 rounded-full"></div>
-                <div class="flex items-center justify-between mb-4">
-                    <div>
-                        <p class="text-base font-medium text-purple-100">Event Bulan Ini</p>
-                        <p class="text-4xl font-bold text-white" id="upcomingEvents"><span class="skeleton-card bg-purple-400/50 w-12 h-10 inline-block"></span></p>
-                    </div>
-                </div>
-                 <div id="eventListContainer" class="space-y-3"><div class="skeleton-card bg-purple-400/50 w-full h-12"></div></div>
-            </div>
-        </div>
-        
-        <hr class="my-8 border-gray-200">
+            <hr class="my-8 border-gray-200">
 
-        <h2 class="text-2xl font-bold text-gray-800 mb-6">Monitoring Tim</h2>
-        <div id="teamMonitoring">
-            <!-- Skeleton Loader -->
-             <div class="skeleton-card w-full h-96"></div>
+            <h2 class="text-2xl font-bold text-gray-800 mb-6">Monitoring Tim</h2>
+            <div id="teamMonitoring">
+                 <div class="skeleton-card w-full h-96"></div>
+            </div>
+        </main>
+    </div>
+
+    <!-- LAYAR PASSWORD BARU -->
+    <div id="passwordModal" class="fixed inset-0 bg-slate-100 z-50 flex items-center justify-center p-4">
+        <div class="w-full max-w-md">
+            <div class="bg-white p-8 rounded-2xl shadow-xl text-center">
+                <img src="https://iili.io/FsLlXA7.png" alt="Logo Malika Boarding School" class="h-16 w-auto mx-auto mb-4">
+                <h2 class="text-2xl font-bold text-gray-800">Akses Terbatas</h2>
+                <p class="text-gray-500 mt-2 mb-6">Silakan masukkan kata sandi untuk melanjutkan.</p>
+                <form id="passwordForm">
+                    <input type="password" id="passwordInput" class="w-full px-4 py-3 border border-gray-300 rounded-lg text-center text-lg tracking-widest" placeholder="••••••••">
+                    <p id="passwordError" class="text-red-500 text-sm mt-2 h-5"></p>
+                    <button type="submit" class="w-full bg-[#020c91] text-white py-3 rounded-lg font-semibold mt-4 hover:bg-opacity-90 transition-colors">Masuk</button>
+                </form>
+            </div>
         </div>
-    </main>
+    </div>
+
 
     <!-- Notification -->
     <div id="notification" class="fixed top-20 right-4 w-auto bg-green-500 text-white px-6 py-3 rounded-lg shadow-lg hidden notification z-50">
@@ -120,6 +143,40 @@
     </div>
 
     <script>
+        // --- KONFIGURASI & LOGIKA PASSWORD BARU ---
+        const CORRECT_PASSWORD = '99'; // Anda bisa mengubah password di sini
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const passwordForm = document.getElementById('passwordForm');
+            const passwordInput = document.getElementById('passwordInput');
+            const passwordError = document.getElementById('passwordError');
+            const appContainer = document.getElementById('appContainer');
+            const passwordModal = document.getElementById('passwordModal');
+
+            if (sessionStorage.getItem('isAuthenticated') === 'true') {
+                showApp();
+            }
+
+            passwordForm.addEventListener('submit', (e) => {
+                e.preventDefault();
+                if (passwordInput.value === CORRECT_PASSWORD) {
+                    sessionStorage.setItem('isAuthenticated', 'true');
+                    showApp();
+                } else {
+                    passwordError.textContent = 'Kata sandi salah. Silakan coba lagi.';
+                    passwordInput.classList.add('border-red-500');
+                    passwordInput.value = '';
+                }
+            });
+
+            function showApp() {
+                passwordModal.classList.add('hidden');
+                appContainer.classList.remove('hidden');
+                displayCurrentDates(); 
+                fetchDashboardData();
+            }
+        });
+
         const googleSheetsConfig = {
             webAppUrl: 'https://script.google.com/macros/s/AKfycbw1Za6at-Zvj5IrqUUuCFJUl6OVWvE0-utfWRhdO9AFXCM3yVbicVnorJqQrfnq-TFkMQ/exec',
         };
@@ -163,17 +220,17 @@
             const feedbackContainer = document.getElementById('feedbackListContainer');
             feedbackContainer.innerHTML = ''; 
              if (!summary.feedbackList || summary.feedbackList.length === 0) {
-                feedbackContainer.innerHTML = `<p class="text-sm text-sky-200 italic">Belum ada feedback baru.</p>`;
+                feedbackContainer.innerHTML = `<p class="text-sm text-purple-200 italic">Belum ada feedback baru.</p>`;
             } else {
                 summary.feedbackList.forEach(fb => {
                     const div = document.createElement('div');
-                    div.className = 'bg-sky-500/50 p-3 rounded-lg';
+                    div.className = 'bg-purple-500/50 p-3 rounded-lg';
                     div.innerHTML = `
                         <div class="flex justify-between items-start">
                             <p class="text-sm text-white flex-1 pr-4">${fb.isi}</p>
                             <span class="text-xs font-medium text-yellow-800 bg-yellow-300 px-2 py-1 rounded-full whitespace-nowrap">${fb.status}</span>
                         </div>
-                        <p class="text-xs text-sky-200 mt-2 text-right">Oleh: ${fb.penerima}</p>
+                        <p class="text-xs text-purple-200 mt-2 text-right">Oleh: ${fb.penerima}</p>
                     `;
                     feedbackContainer.appendChild(div);
                 });
@@ -195,7 +252,7 @@
             const eventsContainer = document.getElementById('eventListContainer');
             eventsContainer.innerHTML = '';
             if (!summary.eventList || summary.eventList.length === 0) {
-                 eventsContainer.innerHTML = `<p class="text-sm text-purple-200 italic">Tidak ada acara bulan ini.</p>`;
+                 eventsContainer.innerHTML = `<p class="text-sm text-sky-200 italic">Tidak ada acara bulan ini.</p>`;
             } else {
                  summary.eventList.forEach(event => {
                     const dateParts = event.date.split(' ');
@@ -209,7 +266,7 @@
                         </div>
                         <div>
                             <p class="font-semibold text-white">${event.name}</p>
-                            <p class="text-xs text-purple-200">${month}</p>
+                            <p class="text-xs text-sky-200">${month}</p>
                         </div>
                     `;
                     eventsContainer.appendChild(div);
@@ -298,16 +355,12 @@
 
             container.innerHTML = `
                 <div class="md:flex md:flex-row md:gap-8 md:items-start">
-                    <!-- Kolom Navigasi (Sidebar/Dropdown) -->
                     <div class="w-full md:w-1/4 lg:w-1/5">
-                        <!-- Dropdown untuk Mobile -->
                         <div class="md:hidden mb-4">
                             <select onchange="displayTeamContent(this.value)" class="w-full p-3 border-gray-300 rounded-xl shadow-sm text-lg font-semibold text-gray-700">
                                 ${teamOrder.map(teamName => `<option value="${teamName}">${teamName}</option>`).join('')}
                             </select>
                         </div>
-
-                        <!-- Sidebar untuk Desktop -->
                         <div class="hidden md:block bg-white p-4 rounded-xl border border-gray-200 shadow-sm self-start h-auto md:max-h-[600px] overflow-y-auto sidebar">
                             <ul class="space-y-1">
                                 ${teamOrder.map(teamName => `
@@ -318,10 +371,7 @@
                             </ul>
                         </div>
                     </div>
-
-                    <!-- Kolom Konten (Satu untuk semua perangkat) -->
                     <div class="w-full md:w-3/4 lg:w-4/5 mt-4 md:mt-0" id="teamContent">
-                         <!-- Konten akan dimuat di sini oleh displayTeamContent -->
                     </div>
                 </div>
             `;
@@ -387,11 +437,6 @@
                  document.getElementById('teamMonitoring').innerHTML = errorMessage;
              }
          }
-
-        document.addEventListener('DOMContentLoaded', () => {
-            displayCurrentDates(); 
-            fetchDashboardData();
-        });
     </script>
 </body>
 </html>
