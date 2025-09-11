@@ -90,23 +90,18 @@
                     </div>
                 </div>
 
-                <!-- 3. Feedback & Masukan (WARNA BARU: KREM) -->
-                <div class="chart-card bg-gradient-to-br from-amber-50 to-orange-100 rounded-2xl shadow-lg p-6 relative overflow-hidden">
-                    <div class="absolute -top-4 -right-4 w-24 h-24 bg-amber-500/10 rounded-full"></div>
+                <!-- 3. Feedback & Masukan (WARNA BARU: KREM & IKON DIHAPUS) -->
+                <div class="chart-card bg-[#F9F3EF] rounded-2xl shadow-lg p-6 relative overflow-hidden">
+                    <div class="absolute -top-4 -right-4 w-24 h-24 bg-stone-500/10 rounded-full"></div>
                     <div class="relative z-10">
                         <div class="flex items-start justify-between mb-4">
                             <div>
-                                <p class="text-base font-medium text-amber-700">Feedback & Masukan</p>
-                                <p class="text-5xl font-extrabold text-amber-900 mt-2" id="newFeedbackCount"><span class="skeleton-card bg-amber-200/50 w-16 h-12 inline-block"></span></p>
-                            </div>
-                            <div class="bg-amber-900/10 p-3 rounded-xl">
-                                 <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-amber-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
-                                </svg>
+                                <p class="text-base font-medium text-stone-700">Feedback & Masukan</p>
+                                <p class="text-5xl font-extrabold text-stone-800 mt-2" id="newFeedbackCount"><span class="skeleton-card bg-stone-200/50 w-16 h-12 inline-block"></span></p>
                             </div>
                         </div>
-                        <p class="text-sm text-amber-600 mb-4">Feedback terbaru </p>
-                        <div id="feedbackListContainer" class="space-y-2"><div class="skeleton-card bg-amber-200/50 w-full h-10"></div></div>
+                        <p class="text-sm text-stone-600 mb-4">Feedback terbaru </p>
+                        <div id="feedbackListContainer" class="space-y-2"><div class="skeleton-card bg-stone-200/50 w-full h-10"></div></div>
                     </div>
                 </div>
             </div>
@@ -174,17 +169,17 @@
             const feedbackContainer = document.getElementById('feedbackListContainer');
             feedbackContainer.innerHTML = ''; 
              if (!summary.feedbackList || summary.feedbackList.length === 0) {
-                feedbackContainer.innerHTML = `<p class="text-sm text-amber-600 italic">Belum ada feedback baru.</p>`;
+                feedbackContainer.innerHTML = `<p class="text-sm text-stone-600 italic">Belum ada feedback baru.</p>`;
             } else {
                 summary.feedbackList.forEach(fb => {
                     const div = document.createElement('div');
-                    div.className = 'bg-white/50 p-3 rounded-lg border border-amber-200/50';
+                    div.className = 'bg-white/50 p-3 rounded-lg border border-stone-200/50';
                     div.innerHTML = `
                         <div class="flex justify-between items-start">
-                            <p class="text-sm text-amber-800 font-medium flex-1 pr-4">${fb.isi}</p>
+                            <p class="text-sm text-stone-800 font-medium flex-1 pr-4">${fb.isi}</p>
                             <span class="text-xs font-medium text-yellow-800 bg-yellow-300 px-2 py-1 rounded-full whitespace-nowrap">${fb.status}</span>
                         </div>
-                        <p class="text-xs text-amber-600 mt-2 text-right">Oleh: ${fb.penerima}</p>
+                        <p class="text-xs text-stone-600 mt-2 text-right">Oleh: ${fb.penerima}</p>
                     `;
                     feedbackContainer.appendChild(div);
                 });
